@@ -1,0 +1,85 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Character.tscn" type="PackedScene" id=1]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 241.825, 10 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 65.6366, 10 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 340, 10 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 68.5293, 10 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 241.825, 3.065 )
+
+[sub_resource type="Animation" id=6]
+length = 4.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("platform:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5, 1, 1.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 200.823, 359.598 ), Vector2( 200.823, 359.598 ), Vector2( 255.568, 359.598 ), Vector2( 199.879, 359.598 ) ]
+}
+
+[node name="World" type="Node2D"]
+
+[node name="Character" parent="." instance=ExtResource( 1 )]
+position = Vector2( 506.125, 298.907 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2( 518.909, 521.001 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource( 1 )
+
+[node name="platform" type="StaticBody2D" parent="."]
+position = Vector2( 199.879, 359.598 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="platform"]
+shape = SubResource( 2 )
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="."]
+position = Vector2( 278.221, 183.686 )
+rotation = 1.57079
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3"]
+shape = SubResource( 3 )
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="."]
+position = Vector2( 455.183, 89.6439 )
+rotation = 1.57079
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4"]
+position = Vector2( -0.943878, 0 )
+shape = SubResource( 1 )
+
+[node name="StaticBody2D5" type="StaticBody2D" parent="."]
+position = Vector2( 937.503, 351.097 )
+rotation = 1.57079
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D5"]
+position = Vector2( -0.943878, 0 )
+shape = SubResource( 4 )
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]
+position = Vector2( 846.433, 416.231 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
+shape = SubResource( 5 )
+one_way_collision = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "New Anim"
+"anims/New Anim" = SubResource( 6 )

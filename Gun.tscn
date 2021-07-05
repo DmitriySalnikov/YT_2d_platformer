@@ -1,0 +1,61 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Gun.gd" type="Script" id=1]
+[ext_resource path="res://Bullet.tscn" type="PackedScene" id=2]
+
+[node name="Gun" type="Node2D"]
+position = Vector2( -0.21875, -1.84375 )
+script = ExtResource( 1 )
+BulletScene = ExtResource( 2 )
+FireRate = 0.3
+
+[node name="Visual" type="Node2D" parent="."]
+modulate = Color( 0, 0, 0, 1 )
+
+[node name="Line2D" type="Line2D" parent="Visual"]
+position = Vector2( 0.727542, 0 )
+scale = Vector2( 1.45273, 1 )
+points = PoolVector2Array( 0, 0, 5, 0 )
+width = 1.607
+default_color = Color( 1, 1, 1, 1 )
+begin_cap_mode = 1
+end_cap_mode = 2
+antialiased = true
+
+[node name="Line2D2" type="Line2D" parent="Visual"]
+position = Vector2( 0.32621, 0.26754 )
+scale = Vector2( 1.31291, 1.31291 )
+points = PoolVector2Array( 0, 0, -0.1875, 2.13281 )
+width = 0.855
+default_color = Color( 1, 1, 1, 1 )
+begin_cap_mode = 1
+end_cap_mode = 1
+antialiased = true
+
+[node name="Line2D3" type="Line2D" parent="Visual"]
+position = Vector2( 3.5, 0.195313 )
+points = PoolVector2Array( 4.164, -0.451, 5.898, -0.451 )
+width = 1.096
+default_color = Color( 1, 1, 1, 1 )
+begin_cap_mode = 1
+end_cap_mode = 1
+antialiased = true
+
+[node name="Line2D4" type="Line2D" parent="Visual"]
+position = Vector2( -0.421248, 0.278831 )
+scale = Vector2( 1.41458, 1.41458 )
+points = PoolVector2Array( 3.83594, 0.507813, 4.04688, 1.28906, 4.86719, 2.04688 )
+width = 1.105
+default_color = Color( 1, 1, 1, 1 )
+joint_mode = 2
+begin_cap_mode = 1
+end_cap_mode = 2
+antialiased = true
+
+[node name="BulletSpawner" type="Position2D" parent="."]
+position = Vector2( 9.57934, -0.242663 )
+__meta__ = {
+"_gizmo_extents_": 2.0
+}
+
+[node name="Tween" type="Tween" parent="."]
