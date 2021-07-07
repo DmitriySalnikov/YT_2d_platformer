@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://DirectionalForce.gd" type="Script" id=1]
+
+[sub_resource type="Curve" id=1]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.683721, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.118182 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 50, 32 )
+
+[node name="DirectionalForce" type="Area2D"]
+monitorable = false
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+ForceCurve = SubResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 125, 0 )
+shape = SubResource( 2 )
+
+[node name="DirVis" type="RayCast2D" parent="."]
+scale = Vector2( 2, 2 )
+exclude_parent = false
+cast_to = Vector2( 25, 0 )
+collision_mask = 0
+collide_with_bodies = false
+
+[connection signal="body_entered" from="." to="." method="_on_Area2D_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_Area2D_body_exited"]
