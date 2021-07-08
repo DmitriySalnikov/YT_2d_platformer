@@ -1,0 +1,100 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://LevelSwitchFade.gd" type="Script" id=1]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform vec2 CenterPosition = vec2(0);
+uniform vec2 RectSize = vec2(1.707, 1);
+uniform float FadePower = 0.016;
+uniform float FadeSize = 0.5;
+
+void fragment(){
+	float m = max(RectSize.x, RectSize.y);
+	float a = smoothstep((FadeSize + FadePower)*m, (FadeSize + FadePower*2.)*m, distance((UV - vec2(0.5)) * RectSize, CenterPosition));
+	COLOR = vec4(vec3(0), a);
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/CenterPosition = Vector2( 0, 0 )
+shader_param/RectSize = Vector2( 1.707, 1 )
+shader_param/FadePower = 0.014
+shader_param/FadeSize = 0.5
+
+[sub_resource type="Animation" id=3]
+resource_name = "Fade"
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("ColorRect:material:shader_param/FadeSize")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 2, -0.25, 0, 0.27547, -1.76633, 0, -0.212944, 0.0546312, 0.33, 0.00266911 ),
+"times": PoolRealArray( 0, 0.8 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("ColorRect:material:shader_param/FadePower")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 0.016, 0, 0, 0, 0, 0.016, 0, 0, 0, 0, 0, -0.116923, 0.00110722, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.6, 0.8 )
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ColorRect:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+tracks/3/type = "method"
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.1, 0.9, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"values": [ {
+"args": [ false ],
+"method": "set_process"
+}, {
+"args": [ true ],
+"method": "set_process"
+}, {
+"args": [ true ],
+"method": "set_process"
+}, {
+"args": [ false ],
+"method": "set_process"
+} ]
+}
+
+[node name="LevelSwitchFade" type="CanvasLayer"]
+layer = 16
+script = ExtResource( 1 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FadeAnim" type="AnimationPlayer" parent="."]
+anims/Fade = SubResource( 3 )
+
+[connection signal="resized" from="ColorRect" to="." method="_on_ColorRect_resized"]
+[connection signal="animation_finished" from="FadeAnim" to="." method="_on_FadeAnim_animation_finished"]

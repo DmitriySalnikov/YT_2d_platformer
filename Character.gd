@@ -39,6 +39,7 @@ onready var wall_detectors_root := $Rays/WallDetectors
 
 var move_vector : Vector2
 
+var snap_to_ground := false
 var is_on_floor_coyote := false
 var jump_coyote_timer := 0.0
 var jump_deffered_timer := 0.0
@@ -83,7 +84,8 @@ func _physics_process(_delta: float) -> void:
 	jump()
 	gravity()
 	
-	velocity = move_and_slide(velocity, Vector2.UP)
+	#velocity = move_and_slide(velocity, Vector2.UP)
+	velocity = move_and_slide_with_snap(velocity, (Vector2.DOWN * 12 if snap_to_ground else Vector2.ZERO), Vector2.UP, false)
 	
 	animations()
 
@@ -127,7 +129,7 @@ func run():
 			velocity.x = lerp(velocity.x, move_vector.normalized().x * MaxGroundSpeed, MoveAccelerationInAir)
 		else:
 			velocity.x = lerp(velocity.x, 0, MoveDeaccelerationInAir)
-	rotate_character(move_vector)
+	rotate_character_dir(move_vector)
 
 # =================================
 # Jump
@@ -147,7 +149,7 @@ func jump():
 			stickman_visual.InAirState = stickman_visual.EInAirState.jump
 			
 			var dir = Vector2(is_facing_right_sign * -1, -1.2).normalized()
-			rotate_character(dir)
+			rotate_character_dir(dir)
 			
 			velocity.x = dir.x * JumpStrength
 			velocity.y = dir.y * JumpStrength
@@ -159,6 +161,7 @@ func jump():
 		calculate_coyote_jump(is_on_floor())
 		
 		if jump_deffered_timer > 0 and is_on_floor_coyote:
+			snap_to_ground = false
 			jump_deffered_timer = 0
 			is_on_floor_coyote = false
 			stickman_visual.InAirState = stickman_visual.EInAirState.jump
@@ -167,6 +170,7 @@ func jump():
 
 func calculate_coyote_jump(is_grounded):
 	if is_grounded:
+		snap_to_ground = true
 		is_on_floor_coyote = true
 		jump_coyote_timer = JumpCoyoteTime
 	else:
@@ -220,10 +224,13 @@ func animations():
 	# run / idle
 	stickman_visual.GroundMove = stickman_visual.EGroundMove.run if (move_vector != Vector2.ZERO and abs(velocity.x) > 15.0) else stickman_visual.EGroundMove.idle
 	if abs(velocity.x) > 0:
-		stickman_visual.RunTimescale = abs(velocity.x) / GroundSpeedNormalAnimScale
+		stickman_visual.RunTimescale = clamp(abs(velocity.x) / GroundSpeedNormalAnimScale, 0.5, 2)
 	
 	# aiming angle
 	var look_angle = Input.get_action_strength("look_up") - Input.get_action_strength("look_down")
+	
+	rotate_weapon_wall_detector(0.5 - look_angle * 0.25)
+	
 	if weapon_wall_detector.is_colliding():
 		stickman_visual.AimBlend = lerp(stickman_visual.AimBlend, 0.9, 0.5)
 		is_can_use_weapon = false
@@ -245,16 +252,22 @@ func animations():
 			stickman_visual.SpaceState = stickman_visual.ESpaceState.weapon
 			stickman_visual.SpaceStateWeapon = stickman_visual.ESpaceStateWeapon.air
 
+func rotate_weapon_wall_detector(angle):
+	weapon_wall_detector.rotation = lerp(weapon_wall_detector.rotation + 1.5708, (PI * angle), 0.5) - 1.5708
+	weapon_wall_detector.force_raycast_update()
 
 func apply_force(force : Vector2):
 	velocity += force
 
-func rotate_character(dir : Vector2):
+func rotate_character_dir(dir : Vector2):
 	if dir.x == 0:
 		return
 	
-	if is_facing_right != (dir.x > 0):
-		is_facing_right = dir.x > 0
+	rotate_character(dir.x > 0)
+
+func rotate_character(is_right: bool):
+	if is_facing_right != is_right:
+		is_facing_right = is_right
 		is_facing_right_sign = 1 if is_facing_right else -1
 		
 		stickman_visual.scale.x = is_facing_right_sign * StickmanScale.x

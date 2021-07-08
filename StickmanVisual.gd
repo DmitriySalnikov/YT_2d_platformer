@@ -8,6 +8,9 @@ signal weapon_attach_mag
 export var WeaponSlotPath : NodePath
 onready var WeaponSlot = get_node(WeaponSlotPath)
 
+export var WeaponWallDetectorPath : NodePath
+onready var WeaponWallDetector = get_node(WeaponWallDetectorPath)
+
 enum EGroundMove { idle, run }
 const ground_move_name := "parameters/ground_move/blend_amount"
 var GroundMove := 0.0 setget set_ground_move, get_ground_move
@@ -152,6 +155,8 @@ func weapon_save_transform():
 	weapon_transition_start_transform = weapon_trans_pos.transform
 
 func weapon_transition(lerp_power : float):
+	if not weapon_transition_end_rt:
+		return
 	weapon_trans_pos.transform = weapon_transition_start_transform.interpolate_with(weapon_transition_end_rt.get_relative_transform_to_parent(root_obj), lerp_power)
 
 func remote_transform_update(rt : RemoteTransform2D, val : bool):

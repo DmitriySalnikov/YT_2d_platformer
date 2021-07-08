@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Character.gd" type="Script" id=1]
 [ext_resource path="res://StickmanVisual.gd" type="Script" id=2]
@@ -10,9 +10,12 @@ _data = [ Vector2( 0, 0.790909 ), 0.0, -0.0446464, 0, 0, Vector2( 0.307692, 0.2 
 
 [sub_resource type="CapsuleShape2D" id=2]
 radius = 14.0
-height = 92.0
+height = 85.0
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="RayShape2D" id=3]
+length = 13.0
+
+[sub_resource type="Animation" id=4]
 tracks/0/type = "value"
 tracks/0/path = NodePath("LegRight:position")
 tracks/0/interp = 1
@@ -914,7 +917,7 @@ tracks/74/keys = {
 "values": [ Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=5]
 length = 0.8
 loop = true
 step = 0.2
@@ -1783,7 +1786,7 @@ tracks/71/keys = {
 "values": [ Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=6]
 length = 0.8
 loop = true
 step = 0.2
@@ -2400,7 +2403,7 @@ tracks/50/keys = {
 "values": [  ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=7]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/path = NodePath("LegRight:position")
@@ -2928,7 +2931,7 @@ tracks/43/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ 11.4756 ]
+"values": [ 4.15436 ]
 }
 tracks/44/type = "value"
 tracks/44/path = NodePath("Spine1/Spine2/Spine3:scale")
@@ -3267,7 +3270,7 @@ tracks/71/keys = {
 "values": [ Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=8]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/path = NodePath("LegRight:position")
@@ -4134,7 +4137,7 @@ tracks/71/keys = {
 "values": [ Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=9]
 length = 2.0
 loop = true
 tracks/0/type = "value"
@@ -5002,8 +5005,7 @@ tracks/71/keys = {
 "values": [ Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=9]
-resource_name = "IdleWeapon"
+[sub_resource type="Animation" id=10]
 length = 2.0
 loop = true
 tracks/0/type = "value"
@@ -5655,7 +5657,7 @@ tracks/53/keys = {
 "values": [ Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=10]
+[sub_resource type="Animation" id=11]
 length = 0.25
 step = 0.05
 tracks/0/type = "value"
@@ -6523,7 +6525,7 @@ tracks/71/keys = {
 "values": [ Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id=12]
 length = 0.25
 step = 0.05
 tracks/0/type = "value"
@@ -7139,7 +7141,7 @@ tracks/50/keys = {
 "values": [ Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=12]
+[sub_resource type="Animation" id=13]
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("LegRight:position")
@@ -8006,8 +8008,7 @@ tracks/71/keys = {
 "values": [ Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=13]
-resource_name = "Reloading"
+[sub_resource type="Animation" id=14]
 length = 1.8
 tracks/0/type = "value"
 tracks/0/path = NodePath("LegRight:position")
@@ -8894,7 +8895,7 @@ tracks/72/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=15]
 length = 0.6
 loop = true
 step = 0.075
@@ -9763,7 +9764,7 @@ tracks/71/keys = {
 "values": [ Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=15]
+[sub_resource type="Animation" id=16]
 length = 0.6
 loop = true
 step = 0.075
@@ -10386,7 +10387,6 @@ __meta__ = {
 "_edit_horizontal_guides_": [ 59.3956 ],
 "_edit_vertical_guides_": [ 16.4345 ]
 }
-MoveAccelerationInAir = 0.105
 OnWallGravityCurve = SubResource( 1 )
 CurrentWeaponType = 1
 
@@ -10396,14 +10396,20 @@ drag_margin_h_enabled = true
 drag_margin_v_enabled = true
 
 [node name="CS2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, -6.05946 )
 shape = SubResource( 2 )
-__meta__ = {
-"_edit_lock_": true
-}
+
+[node name="CP2D" type="CollisionPolygon2D" parent="."]
+position = Vector2( 0, 45.9405 )
+polygon = PoolVector2Array( -8, 0, -2, 8, 0, 10, 2, 8, 8, 0 )
+
+[node name="CSSlopeRay" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 46.5625 )
+shape = SubResource( 3 )
 
 [node name="WeaponSlot" type="Node2D" parent="."]
-position = Vector2( 28.1646, -34.8789 )
-rotation = -0.00493572
+position = Vector2( 12.4233, 10.3644 )
+rotation = 1.309
 scale = Vector2( 3, 3 )
 
 [node name="Gun" parent="WeaponSlot" instance=ExtResource( 5 )]
@@ -10411,7 +10417,7 @@ scale = Vector2( 3, 3 )
 [node name="Rays" type="Node2D" parent="."]
 
 [node name="WeaponWallDetector" type="RayCast2D" parent="Rays"]
-position = Vector2( 0, -36 )
+position = Vector2( 0, -40.5 )
 enabled = true
 exclude_parent = false
 cast_to = Vector2( 46, 0 )
@@ -10439,13 +10445,14 @@ cast_to = Vector2( 16, 0 )
 scale = Vector2( 3, 3 )
 script = ExtResource( 2 )
 WeaponSlotPath = NodePath("../WeaponSlot")
+WeaponWallDetectorPath = NodePath("../Rays/WeaponWallDetector")
 
 [node name="Root" type="Node2D" parent="StickmanVisual"]
 
 [node name="ArmLeft" type="Line2D" parent="StickmanVisual/Root"]
 show_behind_parent = true
-position = Vector2( 0.108468, -11.6696 )
-rotation = 0.390301
+position = Vector2( 0, -12 )
+rotation = 1.8326
 z_index = -1
 points = PoolVector2Array( 0, 0, 8, 0 )
 width = 2.0
@@ -10461,7 +10468,6 @@ __meta__ = {
 
 [node name="ALBottom" type="Line2D" parent="StickmanVisual/Root/ArmLeft"]
 position = Vector2( 8, 0 )
-rotation = -0.780122
 z_index = -1
 points = PoolVector2Array( 0, 0, 8, 0 )
 width = 2.0
@@ -10477,7 +10483,6 @@ __meta__ = {
 
 [node name="IKLHand" type="Position2D" parent="StickmanVisual/Root/ArmLeft/ALBottom"]
 position = Vector2( 8, 0 )
-rotation = 2.24957
 z_index = 1
 __meta__ = {
 "_edit_bone_": true,
@@ -10489,8 +10494,7 @@ position = Vector2( 8, 0 )
 
 [node name="LegLeft" type="Line2D" parent="StickmanVisual/Root"]
 show_behind_parent = true
-position = Vector2( 0, 0.327622 )
-rotation = 1.27686
+rotation = 1.309
 z_index = -1
 points = PoolVector2Array( 0, 0, 10, 0 )
 width = 2.0
@@ -10507,7 +10511,6 @@ __meta__ = {
 
 [node name="LLBottom" type="Line2D" parent="StickmanVisual/Root/LegLeft"]
 position = Vector2( 10, 0 )
-rotation = 0.512805
 z_index = -1
 points = PoolVector2Array( 0, 0, 10, 0 )
 width = 2.0
@@ -10530,8 +10533,6 @@ __meta__ = {
 }
 
 [node name="Spine1" type="Line2D" parent="StickmanVisual/Root"]
-position = Vector2( 0, 0.327622 )
-rotation = -0.0125786
 points = PoolVector2Array( 0, 0, 0, -4 )
 width = 2.0
 default_color = Color( 0, 0, 0, 1 )
@@ -10564,7 +10565,6 @@ __meta__ = {
 
 [node name="Spine2" type="Line2D" parent="StickmanVisual/Root/Spine1"]
 position = Vector2( 0, -4 )
-rotation = 0.0175955
 points = PoolVector2Array( 0, 0, 0, -4 )
 width = 2.0
 default_color = Color( 0, 0, 0, 1 )
@@ -10578,7 +10578,6 @@ __meta__ = {
 
 [node name="Spine3" type="Line2D" parent="StickmanVisual/Root/Spine1/Spine2"]
 position = Vector2( 0, -4 )
-rotation = 0.0296682
 points = PoolVector2Array( 0, 0, 0, -4 )
 width = 2.0
 default_color = Color( 0, 0, 0, 1 )
@@ -10591,7 +10590,7 @@ __meta__ = {
 }
 
 [node name="WeaponBackPos" type="RemoteTransform2D" parent="StickmanVisual/Root/Spine1/Spine2/Spine3"]
-position = Vector2( -4.07584, -4.13283 )
+position = Vector2( -4.076, -2.5 )
 rotation = 1.57507
 remote_path = NodePath("../../../../../../WeaponSlot")
 
@@ -10615,9 +10614,17 @@ __meta__ = {
 "_edit_lock_": true
 }
 
+[node name="ArmsWeaponWallDetectorPos" type="RemoteTransform2D" parent="StickmanVisual/Root/Spine1/Spine2/Spine3"]
+position = Vector2( 0, -5.5 )
+remote_path = NodePath("../../../../../../Rays/WeaponWallDetector")
+update_rotation = false
+update_scale = false
+__meta__ = {
+"_edit_lock_": true
+}
+
 [node name="Neck" type="Line2D" parent="StickmanVisual/Root/Spine1/Spine2/Spine3"]
 position = Vector2( 0, -4 )
-rotation = -0.045649
 points = PoolVector2Array( 0, 0, 0, -1 )
 width = 2.0
 default_color = Color( 0, 0, 0, 1 )
@@ -10633,7 +10640,6 @@ __meta__ = {
 
 [node name="Head" type="Line2D" parent="StickmanVisual/Root/Spine1/Spine2/Spine3/Neck"]
 position = Vector2( 0, -4 )
-rotation = 0.251388
 points = PoolVector2Array( 0, -1, 0.001, -1 )
 width = 8.0
 default_color = Color( 0, 0, 0, 1 )
@@ -10656,8 +10662,7 @@ __meta__ = {
 }
 
 [node name="LegRight" type="Line2D" parent="StickmanVisual/Root"]
-position = Vector2( 0, 0.327622 )
-rotation = 1.45039
+rotation = 1.8326
 z_index = 1
 points = PoolVector2Array( 0, 0, 10, 0 )
 width = 2.0
@@ -10674,7 +10679,6 @@ __meta__ = {
 
 [node name="LRBottom" type="Line2D" parent="StickmanVisual/Root/LegRight"]
 position = Vector2( 10, 0 )
-rotation = 0.424481
 z_index = 1
 points = PoolVector2Array( 0, 0, 10, -1.90735e-06 )
 width = 2.0
@@ -10697,8 +10701,8 @@ __meta__ = {
 }
 
 [node name="ArmRight" type="Line2D" parent="StickmanVisual/Root"]
-position = Vector2( 0.108468, -11.6696 )
-rotation = 0.956749
+position = Vector2( 0, -12 )
+rotation = 1.309
 z_index = 1
 points = PoolVector2Array( 0, 0, 8, 0 )
 width = 2.0
@@ -10714,7 +10718,6 @@ __meta__ = {
 
 [node name="ARBottom" type="Line2D" parent="StickmanVisual/Root/ArmRight"]
 position = Vector2( 8, 0 )
-rotation = -1.90416
 z_index = 1
 points = PoolVector2Array( 0, 0, 8, 0 )
 width = 2.0
@@ -10730,7 +10733,6 @@ __meta__ = {
 
 [node name="IKRHand" type="Position2D" parent="StickmanVisual/Root/ArmRight/ARBottom"]
 position = Vector2( 8, -2.38419e-07 )
-rotation = 2.28682
 z_index = 1
 __meta__ = {
 "_edit_bone_": true,
@@ -10739,7 +10741,6 @@ __meta__ = {
 
 [node name="WeaponPos" type="RemoteTransform2D" parent="StickmanVisual/Root/ArmRight/ARBottom"]
 position = Vector2( 8, 0 )
-rotation = 0.942478
 remote_path = NodePath("../../../../../WeaponSlot")
 
 [node name="WeaponTransitionPos" type="RemoteTransform2D" parent="StickmanVisual/Root"]
@@ -10749,24 +10750,23 @@ remote_path = NodePath("../../../WeaponSlot")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="StickmanVisual/Root"]
 autoplay = "Base"
-anims/Base = SubResource( 3 )
-anims/Fall = SubResource( 4 )
-anims/FallWeapon = SubResource( 5 )
-anims/GunAimDown = SubResource( 6 )
-anims/GunAimUp = SubResource( 7 )
-anims/Idle = SubResource( 8 )
-anims/IdleWeapon = SubResource( 9 )
-anims/Jump = SubResource( 10 )
-anims/JumpWeapon = SubResource( 11 )
-anims/OnWall = SubResource( 12 )
-anims/Reloading = SubResource( 13 )
-anims/Run = SubResource( 14 )
-anims/RunWeapon = SubResource( 15 )
+anims/Base = SubResource( 4 )
+anims/Fall = SubResource( 5 )
+anims/FallWeapon = SubResource( 6 )
+anims/GunAimDown = SubResource( 7 )
+anims/GunAimUp = SubResource( 8 )
+anims/Idle = SubResource( 9 )
+anims/IdleWeapon = SubResource( 10 )
+anims/Jump = SubResource( 11 )
+anims/JumpWeapon = SubResource( 12 )
+anims/OnWall = SubResource( 13 )
+anims/Reloading = SubResource( 14 )
+anims/Run = SubResource( 15 )
+anims/RunWeapon = SubResource( 16 )
 
 [node name="AnimationTree" type="AnimationTree" parent="StickmanVisual/Root"]
 tree_root = ExtResource( 4 )
 anim_player = NodePath("../AnimationPlayer")
-active = true
 parameters/aim_blend/blend_position = 0.5
 parameters/fall_blend/blend_position = 1.0
 parameters/ground_move/blend_amount = 0.0
