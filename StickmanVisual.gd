@@ -1,9 +1,13 @@
+tool
 extends Node2D
 
 # warning-ignore-all:unused_signal
 signal weapon_drop_mag
 signal weapon_create_mag
 signal weapon_attach_mag
+
+export var TintColor := Color.white setget set_stickman_tint
+export var TintGrayCurve : Curve
 
 export var WeaponSlotPath : NodePath
 onready var WeaponSlot = get_node(WeaponSlotPath)
@@ -58,14 +62,34 @@ var weapon_transition_start_transform : Transform2D
 var weapon_transition_end_rt : RemoteTransform2D
 
 func _ready() -> void:
-	anim_tree.active = true
+	if not Engine.editor_hint:
+		anim_tree.active = true
+		
+		weapon_pos.remote_path = weapon_pos.get_path_to(WeaponSlot)
+		weapon_pos_back.remote_path = weapon_pos_back.get_path_to(WeaponSlot)
+		weapon_trans_pos.remote_path = weapon_trans_pos.get_path_to(WeaponSlot)
+		
+		update_stickman_color()
+		#force reset
+		set_has_gun(false, true)
+
+# tint
+func set_stickman_tint(val : Color):
+	TintColor = val
+	update_stickman_color()
+
+func update_stickman_color():
+	var full_tint = [$Root/ArmRight, $Root/LegRight, $Root/Spine1]
+	var grayed_tint = [$Root/ArmLeft, $Root/LegLeft]
 	
-	weapon_pos.remote_path = weapon_pos.get_path_to(WeaponSlot)
-	weapon_pos_back.remote_path = weapon_pos_back.get_path_to(WeaponSlot)
-	weapon_trans_pos.remote_path = weapon_trans_pos.get_path_to(WeaponSlot)
+	for l in full_tint:
+		l.modulate = TintColor
 	
-	#force reset
-	set_has_gun(false, true)
+	var grayed = TintColor
+	grayed.v = TintGrayCurve.interpolate(grayed.v)
+	
+	for l in grayed_tint:
+		l.modulate = grayed
 
 # ground_move
 func set_ground_move(val : float):

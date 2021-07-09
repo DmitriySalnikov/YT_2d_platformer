@@ -1,3 +1,4 @@
+class_name StickmanCharacter
 extends KinematicBody2D
 
 enum WeaponTypes{
@@ -15,7 +16,7 @@ export(float, 0, 9800) var GRAVITY := 100.0
 export(float, 0, 9800) var MaxGravitySpeed := 1000.0
 export(float, 0, 9800) var MaxGravitySpeedOnWallScale := 0.5
 export(float, 0, 3000) var MaxGroundSpeed := 500.0
-export(float, 0, 3000) var GroundSpeedNormalAnimScale := 250.0
+export(float, 0, 3000) var GroundSpeedNormalAnimScale := 400.0
 export(float, 0, 1) var JumpCoyoteTime := 0.1
 export(float, 0.001, 1) var JumpDefferedTime := 0.1
 export(float, 0, 25000) var JumpStrength := 1300.0
@@ -37,7 +38,12 @@ onready var weapons_map := {
 
 onready var wall_detectors_root := $Rays/WallDetectors
 
-var move_vector : Vector2
+var input_move_vector : float
+var input_jump_just_pressed : bool
+var input_look_angle : float
+var input_fire_pressed : bool
+var input_next_weapon_just_pressed : bool
+var input_reload_just_pressed : bool
 
 var snap_to_ground := false
 var is_on_floor_coyote := false
@@ -78,27 +84,31 @@ func _connect_to_stickman():
 	stickman_visual.connect("weapon_attach_mag", self, "attach_weapon_mag")
 
 func _physics_process(_delta: float) -> void:
+	process_input()
+	
 	weapons()
 	run()
 	on_wall()
 	jump()
 	gravity()
 	
-	#velocity = move_and_slide(velocity, Vector2.UP)
 	velocity = move_and_slide_with_snap(velocity, (Vector2.DOWN * 12 if snap_to_ground else Vector2.ZERO), Vector2.UP, false)
 	
 	animations()
+
+func process_input():
+	pass
 
 # =================================
 # Weapons
 
 func weapons():
-	if Input.is_action_pressed("fire") and is_can_use_weapon:
+	if input_fire_pressed and is_can_use_weapon:
 		if current_weapon and CurrentWeaponType != WeaponTypes.None and not is_holding_on_wall:
 			current_weapon.spawn_bullet()
-	if Input.is_action_just_pressed("ui_home"):
+	if input_next_weapon_just_pressed:
 		self.CurrentWeaponType = wrapi(CurrentWeaponType + 1, 0, WeaponTypes.size())
-	if Input.is_action_just_pressed("reload"):
+	if input_reload_just_pressed:
 		stickman_visual.WeaponReload = true
 
 func drop_weapon_mag():
@@ -118,18 +128,17 @@ func attach_weapon_mag():
 
 func run():
 	# horizontal movement
-	move_vector = Vector2((Input.get_action_strength("move_right") - Input.get_action_strength("move_left")), 0)
 	if is_on_floor():
-		if move_vector != Vector2.ZERO:
-			velocity.x = lerp(velocity.x, move_vector.normalized().x * MaxGroundSpeed, MoveAcceleration)
+		if input_move_vector != 0:
+			velocity.x = lerp(velocity.x, input_move_vector * MaxGroundSpeed, MoveAcceleration)
 		else:
 			velocity.x = lerp(velocity.x, 0, MoveDeacceleration)
 	else:
-		if move_vector != Vector2.ZERO:
-			velocity.x = lerp(velocity.x, move_vector.normalized().x * MaxGroundSpeed, MoveAccelerationInAir)
+		if input_move_vector != 0:
+			velocity.x = lerp(velocity.x, input_move_vector * MaxGroundSpeed, MoveAccelerationInAir)
 		else:
 			velocity.x = lerp(velocity.x, 0, MoveDeaccelerationInAir)
-	rotate_character_dir(move_vector)
+	rotate_character_dir(input_move_vector)
 
 # =================================
 # Jump
@@ -137,19 +146,19 @@ func run():
 func jump():
 	# deffered jump
 	jump_deffered_timer -= get_physics_process_delta_time()
-	if Input.is_action_just_pressed("jump"):
+	if input_jump_just_pressed:
 		jump_deffered_timer = JumpDefferedTime
 	
 	if is_holding_on_wall:
 		#calculate_coyote_jump(true)
 		wall_holding_time -= get_physics_process_delta_time()
 		
-		if Input.is_action_just_pressed("jump"):# and is_on_floor_coyote:
+		if jump_deffered_timer > 0:# and is_on_floor_coyote:
 			is_on_floor_coyote = false
 			stickman_visual.InAirState = stickman_visual.EInAirState.jump
 			
 			var dir = Vector2(is_facing_right_sign * -1, -1.2).normalized()
-			rotate_character_dir(dir)
+			rotate_character_dir(dir.x)
 			
 			velocity.x = dir.x * JumpStrength
 			velocity.y = dir.y * JumpStrength
@@ -169,7 +178,7 @@ func jump():
 
 
 func calculate_coyote_jump(is_grounded):
-	if is_grounded:
+	if is_grounded and velocity.y >= 0:
 		snap_to_ground = true
 		is_on_floor_coyote = true
 		jump_coyote_timer = JumpCoyoteTime
@@ -222,20 +231,19 @@ func gravity():
 
 func animations():
 	# run / idle
-	stickman_visual.GroundMove = stickman_visual.EGroundMove.run if (move_vector != Vector2.ZERO and abs(velocity.x) > 15.0) else stickman_visual.EGroundMove.idle
+	stickman_visual.GroundMove = stickman_visual.EGroundMove.run if (input_move_vector != 0 and abs(velocity.x) > 15.0) else stickman_visual.EGroundMove.idle
 	if abs(velocity.x) > 0:
 		stickman_visual.RunTimescale = clamp(abs(velocity.x) / GroundSpeedNormalAnimScale, 0.5, 2)
 	
 	# aiming angle
-	var look_angle = Input.get_action_strength("look_up") - Input.get_action_strength("look_down")
-	
-	rotate_weapon_wall_detector(0.5 - look_angle * 0.25)
+	var target_angle = input_look_angle * 0.5 + 0.5
+	rotate_weapon_wall_detector(target_angle)
 	
 	if weapon_wall_detector.is_colliding():
 		stickman_visual.AimBlend = lerp(stickman_visual.AimBlend, 0.9, 0.5)
 		is_can_use_weapon = false
 	else:
-		stickman_visual.AimBlend = lerp(stickman_visual.AimBlend, 0.5 - look_angle * 0.25, 0.5)
+		stickman_visual.AimBlend = lerp(stickman_visual.AimBlend, target_angle, 0.5)
 		is_can_use_weapon = true
 	
 	if is_on_floor():
@@ -259,11 +267,11 @@ func rotate_weapon_wall_detector(angle):
 func apply_force(force : Vector2):
 	velocity += force
 
-func rotate_character_dir(dir : Vector2):
-	if dir.x == 0:
+func rotate_character_dir(dir : float):
+	if dir == 0:
 		return
 	
-	rotate_character(dir.x > 0)
+	rotate_character(dir > 0)
 
 func rotate_character(is_right: bool):
 	if is_facing_right != is_right:

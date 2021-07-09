@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://StickmanCharacter.tscn" type="PackedScene" id=1]
+[ext_resource path="res://StickmanEnemy.gd" type="Script" id=2]
+
+[node name="StickmanEnemy" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="StickmanVisual" parent="." index="5"]
+TintColor = Color( 0.772549, 0, 0, 1 )
+
+[node name="UpdateNavTimer" type="Timer" parent="." index="6"]
+process_mode = 0
+wait_time = 0.1
+autostart = true
+
+[node name="EnemyDetector" type="RayCast2D" parent="." index="7"]
+position = Vector2( 0, -37 )
+
+[connection signal="timeout" from="UpdateNavTimer" to="." method="_on_UpdateNavTimer_timeout"]

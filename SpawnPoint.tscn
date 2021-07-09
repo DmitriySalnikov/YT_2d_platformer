@@ -3,7 +3,7 @@
 [ext_resource path="res://SpawnPoint.gd" type="Script" id=1]
 [ext_resource path="res://EditorOnly2D.gd" type="Script" id=2]
 
-[sub_resource type="CapsuleShape2D" id=1]
+[sub_resource type="CapsuleShape2D" id=14]
 radius = 14.0
 height = 94.634
 
@@ -19,7 +19,7 @@ script = ExtResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -1.68559 )
-shape = SubResource( 1 )
+shape = SubResource( 14 )
 disabled = true
 
 [node name="EditorOnly" type="Node2D" parent="."]

@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://StickmanCharacter.tscn" type="PackedScene" id=1]
+[ext_resource path="res://StickmanHero.gd" type="Script" id=2]
+
+[node name="StickmanHero" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="Camera2D" type="Camera2D" parent="." index="0"]
+current = true
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+
+[node name="StickmanVisual" parent="." index="6"]
+TintColor = Color( 0, 0, 0, 1 )

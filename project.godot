@@ -18,10 +18,28 @@ _global_script_classes=[ {
 "class": "SpawnPoint",
 "language": "GDScript",
 "path": "res://SpawnPoint.gd"
+}, {
+"base": "KinematicBody2D",
+"class": "StickmanCharacter",
+"language": "GDScript",
+"path": "res://StickmanCharacter.gd"
+}, {
+"base": "StickmanCharacter",
+"class": "StickmanEnemy",
+"language": "GDScript",
+"path": "res://StickmanEnemy.gd"
+}, {
+"base": "StickmanCharacter",
+"class": "StickmanHero",
+"language": "GDScript",
+"path": "res://StickmanHero.gd"
 } ]
 _global_script_class_icons={
 "EditorOnly2D": "",
-"SpawnPoint": ""
+"SpawnPoint": "",
+"StickmanCharacter": "",
+"StickmanEnemy": "",
+"StickmanHero": ""
 }
 
 [application]
