@@ -21,14 +21,21 @@ func _draw() -> void:
 		draw_line(point - global_position, point2 - global_position, Color.red, 2)
 
 func _on_UpdateNavTimer_timeout() -> void:
-	last_path = navmap.get_simple_path(global_position, get_parent().get_node("StickmanHero").global_position)
+	last_path = navmap.get_simple_path(global_position, get_parent().get_node("StickmanPlayer").global_position)
 	update()
-	
+
+func on_dead_virtual():
+	set_collision_layer_bit(10, false)
+	set_collision_mask_bit(10, false)
+
+func on_resurrected_virtual():
+	set_collision_layer_bit(10, true)
+	set_collision_mask_bit(10, true)
 
 func _enemy_move():
 	var dir = 0.0
 	if last_path.size() > 1:
-		var vec : Vector2 = global_position - get_parent().get_node("StickmanHero").global_position
+		var vec : Vector2 = global_position - get_parent().get_node("StickmanPlayer").global_position
 		if vec.length() > 200:
 			var vec_to_point = last_path[1] - global_position
 			if abs(vec_to_point.x) > 5:
@@ -39,11 +46,23 @@ func _enemy_move():
 	self.input_jump_just_pressed = false
 
 func _enemy_weapon():
-	var hero = get_parent().get_node("StickmanHero")
-	self.input_look_angle = (global_position - hero.global_position).angle() / 1.5708 - 0.785398
-	#print((global_position - hero.global_position).angle())
-	#print(self.input_look_angle)
+	var player = get_parent().get_node("StickmanPlayer")
+	var player_pos : Vector2 = player.global_position
+	var weapon_pos : Vector2 = global_position
 	
-	self.input_fire_pressed = false
+	if player_pos.x > weapon_pos.x:
+		self.input_look_angle = (player_pos - weapon_pos).angle() / 1.5708
+		rotate_character(true)
+	else:
+		rotate_character(false)
+		self.input_look_angle = ((weapon_pos - player_pos) * Vector2(1, -1)).angle() / 1.5708
+	
+	_update_player_detector(player)
+	self.input_fire_pressed = enemy_detector.is_colliding() and enemy_detector.get_collider() is StickmanPlayer and enemy_detector.get_collider().health_comp.is_alive()
 	self.input_next_weapon_just_pressed = false
 	self.input_reload_just_pressed = false
+
+func _update_player_detector(player : Node2D):
+	var player_pos : Vector2 = player.global_position
+	enemy_detector.cast_to = player_pos - enemy_detector.global_position
+	enemy_detector.force_raycast_update()

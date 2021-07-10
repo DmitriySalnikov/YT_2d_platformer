@@ -1,142 +1,147 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://SpawnPoint.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Levels/TestLevels.tscn" type="PackedScene" id=1]
 [ext_resource path="res://LevelSwitcher.tscn" type="PackedScene" id=2]
-[ext_resource path="res://TestTileset.png" type="Texture" id=3]
-[ext_resource path="res://Level.gd" type="Script" id=4]
-[ext_resource path="res://StickmanHero.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Flashlight.png" type="Texture" id=3]
+[ext_resource path="res://StickmanEnemy.tscn" type="PackedScene" id=4]
 
-[sub_resource type="Animation" id=1]
-length = 4.0
-loop = true
-
-[sub_resource type="ConvexPolygonShape2D" id=2]
-points = PoolVector2Array( 32, 32, 0, 32, 0, 0, 32, 0 )
-
-[sub_resource type="ConvexPolygonShape2D" id=3]
-points = PoolVector2Array( 0, 0, 0, 0, 32, 32, 0, 32 )
-
-[sub_resource type="ConvexPolygonShape2D" id=4]
-points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
-
-[sub_resource type="ConvexPolygonShape2D" id=5]
-points = PoolVector2Array( 32, 6.70758, 0, 6.70758, 0, 0, 32, 0 )
-
-[sub_resource type="TileSet" id=6]
-0/name = "TestTileset.png 0"
-0/texture = ExtResource( 3 )
-0/tex_offset = Vector2( 0, 0 )
-0/modulate = Color( 1, 1, 1, 1 )
-0/region = Rect2( 0, 0, 32, 32 )
-0/tile_mode = 0
-0/occluder_offset = Vector2( 0, 0 )
-0/navigation_offset = Vector2( 0, 0 )
-0/shape_offset = Vector2( 0, 0 )
-0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-0/shape = SubResource( 2 )
-0/shape_one_way = false
-0/shape_one_way_margin = 1.0
-0/shapes = [ {
-"autotile_coord": Vector2( 0, 0 ),
-"one_way": false,
-"one_way_margin": 1.0,
-"shape": SubResource( 2 ),
-"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
-} ]
-0/z_index = 0
-1/name = "TestTileset.png 1"
-1/texture = ExtResource( 3 )
-1/tex_offset = Vector2( 0, 0 )
-1/modulate = Color( 1, 1, 1, 1 )
-1/region = Rect2( 32, 0, 32, 32 )
-1/tile_mode = 0
-1/occluder_offset = Vector2( 0, 0 )
-1/navigation_offset = Vector2( 0, 0 )
-1/shape_offset = Vector2( 0, 0 )
-1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-1/shape = SubResource( 3 )
-1/shape_one_way = false
-1/shape_one_way_margin = 1.0
-1/shapes = [ {
-"autotile_coord": Vector2( 0, 0 ),
-"one_way": false,
-"one_way_margin": 1.0,
-"shape": SubResource( 3 ),
-"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
-} ]
-1/z_index = 0
-2/name = "TestTileset.png 2"
-2/texture = ExtResource( 3 )
-2/tex_offset = Vector2( 0, 0 )
-2/modulate = Color( 1, 1, 1, 1 )
-2/region = Rect2( 32, 32, 32, 32 )
-2/tile_mode = 0
-2/occluder_offset = Vector2( 0, 0 )
-2/navigation_offset = Vector2( 0, 0 )
-2/shape_offset = Vector2( 0, 0 )
-2/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-2/shape = SubResource( 4 )
-2/shape_one_way = false
-2/shape_one_way_margin = 1.0
-2/shapes = [ {
-"autotile_coord": Vector2( 0, 0 ),
-"one_way": false,
-"one_way_margin": 1.0,
-"shape": SubResource( 4 ),
-"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
-} ]
-2/z_index = 0
-3/name = "TestTileset.png 3"
-3/texture = ExtResource( 3 )
-3/tex_offset = Vector2( 0, 0 )
-3/modulate = Color( 1, 1, 1, 1 )
-3/region = Rect2( 0, 32, 32, 32 )
-3/tile_mode = 0
-3/occluder_offset = Vector2( 0, 0 )
-3/navigation_offset = Vector2( 0, 0 )
-3/shape_offset = Vector2( 0, 0 )
-3/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-3/shape = SubResource( 5 )
-3/shape_one_way = true
-3/shape_one_way_margin = 1.0
-3/shapes = [ {
-"autotile_coord": Vector2( 0, 0 ),
-"one_way": true,
-"one_way_margin": 1.0,
-"shape": SubResource( 5 ),
-"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
-} ]
-3/z_index = 0
-
-[sub_resource type="RectangleShape2D" id=7]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 307.239, 10 )
 
-[node name="TestLevel2" type="Node2D"]
-script = ExtResource( 4 )
-CharacterScene = ExtResource( 5 )
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 5, 16 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "New Anim"
-"anims/New Anim" = SubResource( 1 )
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 1, 1 )
 
-[node name="TileMap" type="TileMap" parent="."]
-tile_set = SubResource( 6 )
-cell_size = Vector2( 32, 32 )
-format = 1
-tile_data = PoolIntArray( 65535, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 131071, 0, 0, 65536, 0, 0, 65537, 0, 0, 65538, 0, 0, 65539, 0, 0, 65540, 0, 0, 196607, 0, 0, 131072, 0, 0, 131073, 0, 0, 131074, 0, 0, 131075, 0, 0, 131076, 0, 0, 262143, 0, 0, 196608, 0, 0, 196609, 0, 0, 196610, 0, 0, 196611, 0, 0, 196612, 0, 0, 327679, 0, 0, 262144, 0, 0, 262145, 0, 0, 262146, 0, 0, 262147, 0, 0, 262148, 0, 0, 393215, 0, 0, 327680, 0, 0, 327681, 0, 0, 327682, 0, 0, 327683, 0, 0, 327684, 0, 0, 458751, 0, 0, 393216, 0, 0, 393217, 0, 0, 393218, 0, 0, 393219, 0, 0, 393220, 0, 0, 524287, 0, 0, 458752, 0, 0, 458753, 0, 0, 458754, 0, 0, 458755, 0, 0, 458756, 0, 0, 589823, 0, 0, 524288, 0, 0, 524289, 0, 0, 524290, 0, 0, 524291, 0, 0, 524292, 0, 0, 524305, 3, 0, 524306, 3, 0, 524307, 3, 0, 524308, 3, 0, 524309, 3, 0, 524310, 3, 0, 524311, 0, 0, 524312, 0, 0, 524313, 0, 0, 524314, 0, 0, 524315, 0, 0, 524316, 0, 0, 524317, 0, 0, 524318, 0, 0, 524319, 0, 0, 524320, 0, 0, 655359, 0, 0, 589824, 0, 0, 589825, 0, 0, 589826, 0, 0, 589827, 0, 0, 589828, 0, 0, 589853, 0, 0, 589854, 0, 0, 589855, 0, 0, 589856, 0, 0, 720895, 0, 0, 655360, 0, 0, 655361, 0, 0, 655362, 0, 0, 655363, 0, 0, 655364, 0, 0, 655367, 3, 0, 655368, 3, 0, 655369, 3, 0, 655370, 3, 0, 655371, 3, 0, 655372, 3, 0, 655389, 0, 0, 655390, 0, 0, 655391, 0, 0, 655392, 0, 0, 786431, 0, 0, 720896, 0, 0, 720897, 0, 0, 720898, 0, 0, 720899, 0, 0, 720900, 0, 0, 720925, 0, 0, 720926, 0, 0, 720927, 0, 0, 720928, 0, 0, 851967, 0, 0, 786432, 0, 0, 786433, 0, 0, 786434, 0, 0, 786435, 0, 0, 786436, 0, 0, 786461, 0, 0, 786462, 0, 0, 786463, 0, 0, 786464, 0, 0, 917503, 0, 0, 851968, 0, 0, 851969, 0, 0, 851970, 0, 0, 851971, 0, 0, 851972, 0, 0, 851997, 0, 0, 851998, 0, 0, 851999, 0, 0, 852000, 0, 0, 983039, 0, 0, 917518, 3, 0, 917519, 3, 0, 917520, 3, 0, 917521, 3, 0, 917522, 3, 0, 917523, 3, 0, 917524, 3, 0, 917533, 0, 0, 917534, 0, 0, 917535, 0, 0, 917536, 0, 0, 1048575, 0, 0, 983069, 0, 0, 983070, 0, 0, 983071, 0, 0, 983072, 0, 0, 1114111, 0, 0, 1048605, 0, 0, 1048606, 0, 0, 1048607, 0, 0, 1048608, 0, 0, 1179647, 0, 0, 1114141, 0, 0, 1114142, 0, 0, 1114143, 0, 0, 1114144, 0, 0, 1245183, 0, 0, 1179648, 0, 0, 1179649, 0, 0, 1179650, 0, 0, 1179651, 0, 0, 1179652, 0, 0, 1179653, 0, 0, 1179654, 0, 0, 1179655, 0, 0, 1179656, 0, 0, 1179657, 0, 0, 1179658, 0, 0, 1179659, 0, 0, 1179660, 0, 0, 1179661, 0, 0, 1179662, 0, 0, 1179663, 0, 0, 1179664, 0, 0, 1179665, 0, 0, 1179666, 0, 0, 1179667, 0, 0, 1179668, 0, 0, 1179669, 0, 0, 1179670, 0, 0, 1179671, 0, 0, 1179672, 0, 0, 1179673, 0, 0, 1179674, 0, 0, 1179675, 0, 0, 1179676, 0, 0, 1179677, 0, 0, 1179678, 0, 0, 1179679, 0, 0, 1179680, 0, 0 )
+[node name="TestLevel2" instance=ExtResource( 1 )]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." index="0"]
+margin_left = -224.0
+margin_top = -152.0
+margin_right = 1432.0
+margin_bottom = 816.0
+color = Color( 0.870588, 0.870588, 0.870588, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Solids" parent="." index="2"]
+tile_data = PoolIntArray( 65535, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 131071, 0, 0, 65536, 0, 0, 65537, 0, 0, 65538, 0, 0, 65539, 0, 0, 196607, 0, 0, 131072, 0, 0, 131073, 0, 0, 131074, 0, 0, 131075, 0, 0, 262143, 0, 0, 196608, 0, 0, 196609, 0, 0, 196610, 0, 0, 196611, 0, 0, 327679, 0, 0, 262144, 0, 0, 262145, 0, 0, 262146, 0, 0, 262147, 0, 0, 393215, 0, 0, 327680, 0, 0, 327681, 0, 0, 327682, 0, 0, 327683, 0, 0, 458751, 0, 0, 393216, 0, 0, 393217, 0, 0, 393218, 0, 0, 393219, 0, 0, 524287, 0, 0, 458752, 0, 0, 458753, 0, 0, 458754, 0, 0, 458755, 0, 0, 589823, 0, 0, 524288, 0, 0, 524289, 0, 0, 524290, 0, 0, 524291, 0, 0, 524311, 0, 0, 524312, 0, 0, 524313, 0, 0, 524314, 0, 0, 524315, 0, 0, 524316, 0, 0, 524317, 0, 0, 524318, 0, 0, 524319, 0, 0, 524320, 0, 0, 655359, 0, 0, 589824, 0, 0, 589825, 0, 0, 589826, 0, 0, 589827, 0, 0, 589853, 0, 0, 589854, 0, 0, 589855, 0, 0, 589856, 0, 0, 720895, 0, 0, 655360, 0, 0, 655361, 0, 0, 655362, 0, 0, 655363, 0, 0, 655389, 0, 0, 655390, 0, 0, 655391, 0, 0, 655392, 0, 0, 786431, 0, 0, 720896, 0, 0, 720897, 0, 0, 720898, 0, 0, 720899, 0, 0, 720925, 0, 0, 720926, 0, 0, 720927, 0, 0, 720928, 0, 0, 851967, 0, 0, 786432, 0, 0, 786433, 0, 0, 786434, 0, 0, 786435, 0, 0, 786461, 0, 0, 786462, 0, 0, 786463, 0, 0, 786464, 0, 0, 851997, 0, 0, 851998, 0, 0, 851999, 0, 0, 852000, 0, 0, 917533, 0, 0, 917534, 0, 0, 917535, 0, 0, 917536, 0, 0, 983069, 0, 0, 983070, 0, 0, 983071, 0, 0, 983072, 0, 0, 1048605, 0, 0, 1048606, 0, 0, 1048607, 0, 0, 1048608, 0, 0, 1114141, 0, 0, 1114142, 0, 0, 1114143, 0, 0, 1114144, 0, 0, 1179653, 0, 0, 1179654, 0, 0, 1179655, 0, 0, 1179656, 0, 0, 1179657, 0, 0, 1179658, 0, 0, 1179659, 0, 0, 1179660, 0, 0, 1179661, 0, 0, 1179662, 0, 0, 1179663, 0, 0, 1179664, 0, 0, 1179665, 0, 0, 1179666, 0, 0, 1179667, 0, 0, 1179668, 0, 0, 1179669, 0, 0, 1179670, 0, 0, 1179671, 0, 0, 1179672, 0, 0, 1179673, 0, 0, 1179674, 0, 0, 1179675, 0, 0, 1179676, 0, 0, 1179677, 0, 0, 1179678, 0, 0, 1179679, 0, 0, 1179680, 0, 0 )
+
+[node name="OneWays" parent="." index="3"]
+tile_data = PoolIntArray( 524305, 0, 0, 524306, 0, 0, 524307, 0, 0, 524308, 0, 0, 524309, 0, 0, 524310, 0, 0, 655367, 0, 0, 655368, 0, 0, 655369, 0, 0, 655370, 0, 0, 655371, 0, 0, 655372, 0, 0, 917518, 0, 0, 917519, 0, 0, 917520, 0, 0, 917521, 0, 0, 917522, 0, 0, 917523, 0, 0, 917524, 0, 0 )
+
+[node name="NoGrip" parent="." index="4"]
+tile_data = PoolIntArray( 4, 1, 0, 65540, 1, 0, 131076, 1, 0, 196612, 1, 0, 262148, 1, 0, 327684, 1, 0, 393220, 1, 0, 458756, 1, 0, 524292, 1, 0, 589828, 1, 0, 655364, 1, 0, 720900, 1, 0, 786436, 1, 0, 917503, 1, 0, 851968, 1, 0, 851969, 1, 0, 851970, 1, 0, 851971, 1, 0, 851972, 1, 0, 983039, 1, 0, 1048575, 1, 0, 1114111, 1, 0, 1179647, 1, 0, 1245183, 1, 0, 1179648, 1, 0, 1179649, 1, 0, 1179650, 1, 0, 1179651, 1, 0, 1179652, 1, 0 )
+
+[node name="SpawnPoint" parent="." index="5"]
+position = Vector2( 96, 512 )
+SpawnName = "from_level1"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." index="6"]
 position = Vector2( 1233.51, 81.9694 )
 rotation = -0.810114
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-shape = SubResource( 7 )
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" index="0"]
+shape = SubResource( 1 )
 
-[node name="SpawnPoint2" parent="." instance=ExtResource( 1 )]
-position = Vector2( 96.0234, 513.233 )
-SpawnName = "from_level1"
-
-[node name="LevelSwitcher" parent="." instance=ExtResource( 2 )]
+[node name="LevelSwitcher" parent="." index="7" instance=ExtResource( 2 )]
 position = Vector2( 27.1996, 511.586 )
 LevelName = "TestLevel1"
 SpawnPointName = "from_level2"
+
+[node name="StickmanEnemy" parent="." index="8" instance=ExtResource( 4 )]
+position = Vector2( 888, 520 )
+
+[node name="WeaponSlot" parent="StickmanEnemy" index="4"]
+position = Vector2( -12.1651, -30.2395 )
+rotation = 1.6024
+scale = Vector2( 3, 3 )
+
+[node name="Gun" parent="StickmanEnemy/WeaponSlot" index="0"]
+Damage = 0.577
+
+[node name="WeaponWallDetector" parent="StickmanEnemy/Rays" index="0"]
+position = Vector2( 0.304321, -38.9019 )
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." index="9"]
+position = Vector2( 480, 8 )
+color = Color( 0.0352941, 0.0352941, 0.0352941, 1 )
+
+[node name="1" type="RigidBody2D" parent="." index="10"]
+position = Vector2( 640, 264 )
+collision_layer = 0
+collision_mask = 520
+mass = 30.33
+gravity_scale = 32.54
+linear_damp = 32.164
+angular_damp = 23.12
+
+[node name="Line2D" type="Line2D" parent="1" index="0"]
+points = PoolVector2Array( 0, 0, 0, 32 )
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="1" index="1"]
+position = Vector2( 0, 16 )
+shape = SubResource( 2 )
+
+[node name="2" type="RigidBody2D" parent="." index="11"]
+position = Vector2( 640, 296 )
+collision_layer = 0
+collision_mask = 520
+mass = 30.33
+gravity_scale = 32.54
+linear_damp = 32.164
+angular_damp = 23.12
+
+[node name="Line2D" type="Line2D" parent="2" index="0"]
+points = PoolVector2Array( 0, 0, 0, 32 )
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="2" index="1"]
+position = Vector2( 0, 16 )
+shape = SubResource( 2 )
+
+[node name="Light2D" type="Light2D" parent="2" index="2"]
+position = Vector2( -1.52588e-05, 32 )
+rotation = 1.57079
+scale = Vector2( 0.494021, 1.59276 )
+texture = ExtResource( 3 )
+offset = Vector2( 232.609, 0 )
+energy = 1.11
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="." index="12"]
+position = Vector2( 640, 264 )
+
+[node name="CollisionPolygon2D" type="CollisionShape2D" parent="StaticBody2D2" index="0"]
+shape = SubResource( 3 )
+
+[node name="StaticBody2D3" type="RigidBody2D" parent="." index="13"]
+position = Vector2( 640, 328 )
+mass = 30.33
+gravity_scale = 32.54
+linear_damp = 32.164
+angular_damp = 23.12
+
+[node name="CollisionPolygon2D" type="CollisionShape2D" parent="StaticBody2D3" index="0"]
+shape = SubResource( 3 )
+
+[node name="PinJoint2D" type="PinJoint2D" parent="." index="14"]
+position = Vector2( 640, 264 )
+node_a = NodePath("../StaticBody2D2")
+node_b = NodePath("../1")
+
+[node name="PinJoint2D2" type="PinJoint2D" parent="." index="15"]
+position = Vector2( 640, 296 )
+node_a = NodePath("../1")
+node_b = NodePath("../2")
+
+[node name="PinJoint2D4" type="PinJoint2D" parent="." index="16"]
+position = Vector2( 640, 328 )
+node_a = NodePath("../2")
+node_b = NodePath("../StaticBody2D3")
+
+[editable path="StickmanEnemy"]

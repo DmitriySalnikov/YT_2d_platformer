@@ -1,0 +1,141 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Splash.png" type="Texture" id=1]
+
+[sub_resource type="Gradient" id=3]
+colors = PoolColorArray( 1.2, 0.05, 0.05, 1, 0.52, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=4]
+gradient = SubResource( 3 )
+width = 64
+
+[sub_resource type="Curve" id=5]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 1, Vector2( 0.131915, 0.126136 ), 1.74365, 0.210999, 1, 0, Vector2( 1, 0.306818 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=6]
+width = 64
+curve = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=1]
+lifetime_randomness = 0.22
+flag_disable_z = true
+spread = 18.75
+gravity = Vector3( 0, 54.675, 0 )
+initial_velocity = 70.87
+angular_velocity = 45.35
+angular_velocity_random = 0.14
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel = 0.09
+linear_accel_random = 0.34
+tangential_accel = 9.45
+tangential_accel_random = 0.24
+damping = 40.16
+damping_random = 0.16
+angle = 360.0
+angle_random = 1.0
+scale = 0.34
+scale_random = 0.67
+scale_curve = SubResource( 6 )
+color_ramp = SubResource( 4 )
+
+[sub_resource type="Curve" id=7]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.385227 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=8]
+width = 64
+curve = SubResource( 7 )
+
+[sub_resource type="ParticlesMaterial" id=9]
+lifetime_randomness = 0.22
+trail_divisor = 44
+trail_size_modifier = SubResource( 8 )
+flag_disable_z = true
+spread = 61.24
+gravity = Vector3( 0, 54.675, 0 )
+initial_velocity = 70.87
+angular_velocity = 45.35
+angular_velocity_random = 0.14
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel = 0.09
+linear_accel_random = 0.34
+tangential_accel = 9.45
+tangential_accel_random = 0.24
+damping = 40.16
+damping_random = 0.16
+angle = 360.0
+angle_random = 1.0
+scale = 0.34
+scale_random = 0.67
+scale_curve = SubResource( 6 )
+color_ramp = SubResource( 4 )
+
+[sub_resource type="Animation" id=2]
+resource_name = "New Anim"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 2,
+"values": [ true ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 1 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "queue_free"
+} ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Particles2D:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 2,
+"values": [ true ]
+}
+
+[node name="Particles2D" type="Particles2D"]
+emitting = false
+amount = 48
+one_shot = true
+speed_scale = 4.35
+explosiveness = 0.55
+randomness = 0.16
+visibility_rect = Rect2( -32, -64, 150, 128 )
+local_coords = false
+process_material = SubResource( 1 )
+texture = ExtResource( 1 )
+
+[node name="Particles2D" type="Particles2D" parent="."]
+emitting = false
+amount = 144
+one_shot = true
+speed_scale = 4.83
+explosiveness = 0.59
+randomness = 0.16
+visibility_rect = Rect2( -32, -64, 150, 128 )
+local_coords = false
+process_material = SubResource( 9 )
+texture = ExtResource( 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "New Anim"
+"anims/New Anim" = SubResource( 2 )

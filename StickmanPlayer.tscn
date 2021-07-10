@@ -1,0 +1,54 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://StickmanCharacter.tscn" type="PackedScene" id=1]
+[ext_resource path="res://StickmanPlayer.gd" type="Script" id=2]
+[ext_resource path="res://Flashlight.png" type="Texture" id=3]
+
+[node name="StickmanPlayer" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="Camera2D" type="Camera2D" parent="." index="0"]
+current = true
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+
+[node name="WeaponSlot" parent="." index="5"]
+position = Vector2( -12.2011, -30.6586 )
+rotation = 1.61361
+scale = Vector2( 3, 3 )
+
+[node name="WeaponWallDetector" parent="Rays" index="0"]
+position = Vector2( 0.3646, -39.1807 )
+
+[node name="Light2D" type="Light2D" parent="Rays/WeaponWallDetector" index="0"]
+visible = false
+scale = Vector2( 0.811, 0.765 )
+texture = ExtResource( 3 )
+offset = Vector2( 232.609, 0 )
+energy = 1.11
+
+[node name="StickmanVisual" parent="." index="7"]
+TintColor = Color( 0, 0, 0, 1 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." index="8"]
+layer = 10
+
+[node name="GUI" type="Control" parent="CanvasLayer" index="0"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WeaponAmmo" type="Label" parent="CanvasLayer/GUI" index="0"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -40.0
+margin_top = -14.0
+grow_horizontal = 0
+grow_vertical = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}

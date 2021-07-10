@@ -5,15 +5,21 @@ extends Node2D
 signal weapon_drop_mag
 signal weapon_create_mag
 signal weapon_attach_mag
+signal weapon_reload_started
+signal weapon_reload_finished
 
 export var TintColor := Color.white setget set_stickman_tint
 export var TintGrayCurve : Curve
 
 export var WeaponSlotPath : NodePath
-onready var WeaponSlot = get_node(WeaponSlotPath)
+onready var WeaponSlot : Node2D = null
 
 export var WeaponWallDetectorPath : NodePath
-onready var WeaponWallDetector = get_node(WeaponWallDetectorPath)
+onready var WeaponWallDetector : Node2D = null
+
+enum EIsAliveState { alive, dead }
+const is_alive_name := "parameters/is_alive/current"
+var IsAlive := 0 setget set_is_alive, get_is_alive
 
 enum EGroundMove { idle, run }
 const ground_move_name := "parameters/ground_move/blend_amount"
@@ -54,6 +60,7 @@ onready var anim_smoother := $AnimSmoother
 onready var has_gun_tween := $HasGunAnim
 onready var root_obj := $Root
 onready var anim_tree := $Root/AnimationTree
+onready var weapon_wall_detector_pos := $Root/Spine1/Spine2/Spine3/ArmsWeaponWallDetectorPos
 onready var weapon_pos_back := $Root/Spine1/Spine2/Spine3/WeaponBackPos
 onready var weapon_pos := $Root/ArmRight/ARBottom/WeaponPos
 onready var weapon_trans_pos := $Root/WeaponTransitionPos
@@ -62,9 +69,13 @@ var weapon_transition_start_transform : Transform2D
 var weapon_transition_end_rt : RemoteTransform2D
 
 func _ready() -> void:
-	if not Engine.editor_hint:
+	if not get_parent() is Viewport:
 		anim_tree.active = true
 		
+		WeaponSlot = get_node(WeaponSlotPath)
+		WeaponWallDetector = get_node(WeaponWallDetectorPath)
+		
+		weapon_wall_detector_pos.remote_path = weapon_wall_detector_pos.get_path_to(WeaponWallDetector)
 		weapon_pos.remote_path = weapon_pos.get_path_to(WeaponSlot)
 		weapon_pos_back.remote_path = weapon_pos_back.get_path_to(WeaponSlot)
 		weapon_trans_pos.remote_path = weapon_trans_pos.get_path_to(WeaponSlot)
@@ -73,23 +84,31 @@ func _ready() -> void:
 		#force reset
 		set_has_gun(false, true)
 
+# is_alive
+func set_is_alive(val : int):
+	anim_tree.set(is_alive_name, val)
+
+func get_is_alive() -> int:
+	return anim_tree.get(is_alive_name)
+
 # tint
 func set_stickman_tint(val : Color):
 	TintColor = val
 	update_stickman_color()
 
 func update_stickman_color():
-	var full_tint = [$Root/ArmRight, $Root/LegRight, $Root/Spine1]
-	var grayed_tint = [$Root/ArmLeft, $Root/LegLeft]
-	
-	for l in full_tint:
-		l.modulate = TintColor
-	
-	var grayed = TintColor
-	grayed.v = TintGrayCurve.interpolate(grayed.v)
-	
-	for l in grayed_tint:
-		l.modulate = grayed
+	if $Root/ArmRight:
+		var full_tint = [$Root/ArmRight, $Root/LegRight, $Root/Spine1]
+		var grayed_tint = [$Root/ArmLeft, $Root/LegLeft]
+		
+		for l in full_tint:
+			l.modulate = TintColor
+		
+		var grayed = TintColor
+		grayed.v = TintGrayCurve.interpolate(grayed.v)
+		
+		for l in grayed_tint:
+			l.modulate = grayed
 
 # ground_move
 func set_ground_move(val : float):
@@ -174,9 +193,10 @@ func start_has_gun_anim(val : bool):
 	has_gun_tween.start()
 
 func weapon_save_transform():
-	weapon_transition_end_rt = (weapon_pos if HasGun else weapon_pos_back)
-	weapon_trans_pos.global_transform = WeaponSlot.global_transform
-	weapon_transition_start_transform = weapon_trans_pos.transform
+	if WeaponSlot:
+		weapon_transition_end_rt = (weapon_pos if HasGun else weapon_pos_back)
+		weapon_trans_pos.global_transform = WeaponSlot.global_transform
+		weapon_transition_start_transform = weapon_trans_pos.transform
 
 func weapon_transition(lerp_power : float):
 	if not weapon_transition_end_rt:

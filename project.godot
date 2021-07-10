@@ -30,16 +30,16 @@ _global_script_classes=[ {
 "path": "res://StickmanEnemy.gd"
 }, {
 "base": "StickmanCharacter",
-"class": "StickmanHero",
+"class": "StickmanPlayer",
 "language": "GDScript",
-"path": "res://StickmanHero.gd"
+"path": "res://StickmanPlayer.gd"
 } ]
 _global_script_class_icons={
 "EditorOnly2D": "",
 "SpawnPoint": "",
 "StickmanCharacter": "",
 "StickmanEnemy": "",
-"StickmanHero": ""
+"StickmanPlayer": ""
 }
 
 [application]
@@ -94,6 +94,15 @@ reload={
 [input_devices]
 
 pointing/emulate_touch_from_mouse=true
+
+[layer_names]
+
+2d_physics/layer_1="Solid"
+2d_physics/layer_2="GripWalls"
+2d_physics/layer_3="OneWayPlatforms"
+2d_physics/layer_4="Props"
+2d_physics/layer_10="Characters"
+2d_physics/layer_11="Enemies"
 
 [physics]
 

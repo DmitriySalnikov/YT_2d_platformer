@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://StickmanCharacter.gd" type="Script" id=1]
 [ext_resource path="res://StickmanVisual.tscn" type="PackedScene" id=2]
+[ext_resource path="res://HealthComponent.gd" type="Script" id=3]
 [ext_resource path="res://Gun.tscn" type="PackedScene" id=5]
 
 [sub_resource type="Curve" id=1]
@@ -15,12 +16,17 @@ height = 85.0
 length = 13.0
 
 [node name="StickmanCharacter" type="KinematicBody2D"]
+collision_layer = 512
+collision_mask = 5
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_horizontal_guides_": [ 59.3956 ],
 "_edit_vertical_guides_": [ 16.4345 ]
 }
 OnWallGravityCurve = SubResource( 1 )
+
+[node name="HealthComp" type="Node" parent="."]
+script = ExtResource( 3 )
 
 [node name="CS2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -6.05946 )
@@ -38,8 +44,8 @@ z_index = -2
 shape = SubResource( 3 )
 
 [node name="WeaponSlot" type="Node2D" parent="."]
-position = Vector2( 12.4232, 10.3645 )
-rotation = 1.309
+position = Vector2( -12.1592, -30.1288 )
+rotation = 1.60479
 scale = Vector2( 3, 3 )
 
 [node name="Gun" parent="WeaponSlot" instance=ExtResource( 5 )]
@@ -47,7 +53,7 @@ scale = Vector2( 3, 3 )
 [node name="Rays" type="Node2D" parent="."]
 
 [node name="WeaponWallDetector" type="RayCast2D" parent="Rays"]
-position = Vector2( 0, -40.5 )
+position = Vector2( 0.330911, -38.7614 )
 enabled = true
 exclude_parent = false
 cast_to = Vector2( 46, 0 )
@@ -59,17 +65,20 @@ position = Vector2( 0, -33 )
 enabled = true
 exclude_parent = false
 cast_to = Vector2( 16, 0 )
+collision_mask = 2
 
 [node name="2" type="RayCast2D" parent="Rays/WallDetectors"]
 enabled = true
 exclude_parent = false
 cast_to = Vector2( 16, 0 )
+collision_mask = 2
 
 [node name="3" type="RayCast2D" parent="Rays/WallDetectors"]
 position = Vector2( 0, 40 )
 enabled = true
 exclude_parent = false
 cast_to = Vector2( 16, 0 )
+collision_mask = 2
 
 [node name="StickmanVisual" parent="." instance=ExtResource( 2 )]
 WeaponSlotPath = NodePath("../WeaponSlot")

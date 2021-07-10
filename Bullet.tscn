@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Bullet.gd" type="Script" id=1]
+[ext_resource path="res://HitSplashParticles.tscn" type="PackedScene" id=2]
 
 [sub_resource type="Curve" id=1]
 _data = [ Vector2( 0, 0.127273 ), 0.0, 0.872727, 0, 1, Vector2( 1, 1 ), 0.872727, 0.0, 1, 0 ]
@@ -41,6 +42,7 @@ tracks/1/keys = {
 
 [node name="Bullet" type="Node2D"]
 script = ExtResource( 1 )
+HitSplashParticles = ExtResource( 2 )
 
 [node name="Line2D" type="Line2D" parent="."]
 points = PoolVector2Array( 25, 10, 552, 5 )
@@ -51,6 +53,7 @@ gradient = SubResource( 2 )
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 exclude_parent = false
+collision_mask = 513
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "New Anim"

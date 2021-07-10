@@ -1,54 +1,57 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=25 format=2]
+[gd_resource type="AnimationNodeBlendTree" load_steps=27 format=2]
 
 [sub_resource type="AnimationNodeAnimation" id=1]
-animation = "OnWall"
+animation = "Dead"
 
 [sub_resource type="AnimationNodeAnimation" id=2]
-animation = "Reloading"
+animation = "OnWall"
 
 [sub_resource type="AnimationNodeAnimation" id=3]
-animation = "GunAimDown"
+animation = "Reloading"
 
 [sub_resource type="AnimationNodeAnimation" id=4]
+animation = "GunAimDown"
+
+[sub_resource type="AnimationNodeAnimation" id=5]
 animation = "GunAimUp"
 
-[sub_resource type="AnimationNodeBlendSpace1D" id=5]
-blend_point_0/node = SubResource( 3 )
+[sub_resource type="AnimationNodeBlendSpace1D" id=6]
+blend_point_0/node = SubResource( 4 )
 blend_point_0/pos = 1.0
-blend_point_1/node = SubResource( 4 )
+blend_point_1/node = SubResource( 5 )
 blend_point_1/pos = 0.0
 
-[sub_resource type="AnimationNodeAnimation" id=6]
+[sub_resource type="AnimationNodeAnimation" id=7]
 animation = "Fall"
 
-[sub_resource type="AnimationNodeAnimation" id=7]
+[sub_resource type="AnimationNodeAnimation" id=8]
 animation = "FallWeapon"
 
-[sub_resource type="AnimationNodeBlendSpace1D" id=8]
-blend_point_0/node = SubResource( 6 )
+[sub_resource type="AnimationNodeBlendSpace1D" id=9]
+blend_point_0/node = SubResource( 7 )
 blend_point_0/pos = 0.0
-blend_point_1/node = SubResource( 7 )
+blend_point_1/node = SubResource( 8 )
 blend_point_1/pos = 1.0
 
-[sub_resource type="AnimationNodeBlend2" id=9]
+[sub_resource type="AnimationNodeBlend2" id=10]
 
-[sub_resource type="AnimationNodeAdd2" id=10]
+[sub_resource type="AnimationNodeAdd2" id=11]
 filter_enabled = true
 filters = [ "..", "ArmLeft/ALBottom:rotation_degrees", "ArmLeft:rotation_degrees", "ArmRight/ARBottom/WeaponPos:rotation_degrees", "ArmRight/ARBottom:rotation_degrees", "ArmRight:rotation_degrees", "Spine1/Spine2/Spine3/Neck/Head:rotation_degrees", "Spine1/Spine2/Spine3/Neck:rotation_degrees", "Spine1/Spine2/Spine3:rotation_degrees" ]
 
-[sub_resource type="AnimationNodeAnimation" id=11]
+[sub_resource type="AnimationNodeAnimation" id=12]
 animation = "Idle"
 
-[sub_resource type="AnimationNodeAnimation" id=12]
+[sub_resource type="AnimationNodeAnimation" id=13]
 animation = "IdleWeapon"
 
-[sub_resource type="AnimationNodeBlendSpace1D" id=13]
-blend_point_0/node = SubResource( 11 )
+[sub_resource type="AnimationNodeBlendSpace1D" id=14]
+blend_point_0/node = SubResource( 12 )
 blend_point_0/pos = 0.0
-blend_point_1/node = SubResource( 12 )
+blend_point_1/node = SubResource( 13 )
 blend_point_1/pos = 1.0
 
-[sub_resource type="AnimationNodeTransition" id=14]
+[sub_resource type="AnimationNodeTransition" id=15]
 input_count = 2
 xfade_time = 0.15
 input_0/name = "jump"
@@ -56,33 +59,41 @@ input_0/auto_advance = true
 input_1/name = "fall"
 input_1/auto_advance = false
 
-[sub_resource type="AnimationNodeAnimation" id=15]
+[sub_resource type="AnimationNodeTransition" id=16]
+input_count = 2
+xfade_time = 0.15
+input_0/name = "alive"
+input_0/auto_advance = false
+input_1/name = "dead"
+input_1/auto_advance = false
+
+[sub_resource type="AnimationNodeAnimation" id=17]
 animation = "Jump"
 
-[sub_resource type="AnimationNodeAnimation" id=16]
+[sub_resource type="AnimationNodeAnimation" id=18]
 animation = "JumpWeapon"
 
-[sub_resource type="AnimationNodeBlendSpace1D" id=17]
-blend_point_0/node = SubResource( 15 )
+[sub_resource type="AnimationNodeBlendSpace1D" id=19]
+blend_point_0/node = SubResource( 17 )
 blend_point_0/pos = 0.0
-blend_point_1/node = SubResource( 16 )
+blend_point_1/node = SubResource( 18 )
 blend_point_1/pos = 1.0
 
-[sub_resource type="AnimationNodeAnimation" id=18]
+[sub_resource type="AnimationNodeAnimation" id=20]
 animation = "Run"
 
-[sub_resource type="AnimationNodeAnimation" id=19]
+[sub_resource type="AnimationNodeAnimation" id=21]
 animation = "RunWeapon"
 
-[sub_resource type="AnimationNodeBlendSpace1D" id=20]
-blend_point_0/node = SubResource( 18 )
+[sub_resource type="AnimationNodeBlendSpace1D" id=22]
+blend_point_0/node = SubResource( 20 )
 blend_point_0/pos = 0.0
-blend_point_1/node = SubResource( 19 )
+blend_point_1/node = SubResource( 21 )
 blend_point_1/pos = 1.0
 
-[sub_resource type="AnimationNodeTimeScale" id=21]
+[sub_resource type="AnimationNodeTimeScale" id=23]
 
-[sub_resource type="AnimationNodeTransition" id=22]
+[sub_resource type="AnimationNodeTransition" id=24]
 input_count = 2
 xfade_time = 0.15
 input_0/name = "weapon"
@@ -90,7 +101,7 @@ input_0/auto_advance = false
 input_1/name = "wall"
 input_1/auto_advance = false
 
-[sub_resource type="AnimationNodeTransition" id=23]
+[sub_resource type="AnimationNodeTransition" id=25]
 input_count = 2
 xfade_time = 0.1
 input_0/name = "ground"
@@ -98,37 +109,41 @@ input_0/auto_advance = false
 input_1/name = "air"
 input_1/auto_advance = false
 
-[sub_resource type="AnimationNodeOneShot" id=24]
+[sub_resource type="AnimationNodeOneShot" id=26]
 
 [resource]
-graph_offset = Vector2( -318.178, 92.9218 )
-nodes/Animation/node = SubResource( 2 )
+graph_offset = Vector2( 471, -64 )
+nodes/Animation/node = SubResource( 3 )
 nodes/Animation/position = Vector2( -160, 280 )
-"nodes/Animation 5/node" = SubResource( 1 )
-"nodes/Animation 5/position" = Vector2( 980, 140 )
-nodes/aim_blend/node = SubResource( 5 )
+"nodes/Animation 2/node" = SubResource( 1 )
+"nodes/Animation 2/position" = Vector2( 1000, 100 )
+"nodes/Animation 5/node" = SubResource( 2 )
+"nodes/Animation 5/position" = Vector2( 600, 140 )
+nodes/aim_blend/node = SubResource( 6 )
 nodes/aim_blend/position = Vector2( -160, 160 )
-nodes/fall_blend/node = SubResource( 8 )
+nodes/fall_blend/node = SubResource( 9 )
 nodes/fall_blend/position = Vector2( -600, 400 )
-nodes/ground_move/node = SubResource( 9 )
+nodes/ground_move/node = SubResource( 10 )
 nodes/ground_move/position = Vector2( -360, 0 )
-nodes/has_gun/node = SubResource( 10 )
+nodes/has_gun/node = SubResource( 11 )
 nodes/has_gun/position = Vector2( 480, -40 )
-nodes/idle_blend/node = SubResource( 13 )
+nodes/idle_blend/node = SubResource( 14 )
 nodes/idle_blend/position = Vector2( -600, 0 )
-nodes/in_air_state/node = SubResource( 14 )
+nodes/in_air_state/node = SubResource( 15 )
 nodes/in_air_state/position = Vector2( -400, 280 )
-nodes/jump_blend/node = SubResource( 17 )
+nodes/is_alive/node = SubResource( 16 )
+nodes/is_alive/position = Vector2( 1200, -60 )
+nodes/jump_blend/node = SubResource( 19 )
 nodes/jump_blend/position = Vector2( -600, 280 )
 nodes/output/position = Vector2( 1380, -60 )
-nodes/run_blend/node = SubResource( 20 )
+nodes/run_blend/node = SubResource( 22 )
 nodes/run_blend/position = Vector2( -800, 120 )
-nodes/run_timescale/node = SubResource( 21 )
+nodes/run_timescale/node = SubResource( 23 )
 nodes/run_timescale/position = Vector2( -600, 120 )
-nodes/space_state/node = SubResource( 22 )
-nodes/space_state/position = Vector2( 1180, -60 )
-nodes/space_state_weapon/node = SubResource( 23 )
+nodes/space_state/node = SubResource( 24 )
+nodes/space_state/position = Vector2( 800, -60 )
+nodes/space_state_weapon/node = SubResource( 25 )
 nodes/space_state_weapon/position = Vector2( -160, -20 )
-nodes/weapon_reload/node = SubResource( 24 )
+nodes/weapon_reload/node = SubResource( 26 )
 nodes/weapon_reload/position = Vector2( 200, 140 )
-node_connections = [ "output", 0, "space_state", "run_timescale", 0, "run_blend", "in_air_state", 0, "jump_blend", "in_air_state", 1, "fall_blend", "ground_move", 0, "idle_blend", "ground_move", 1, "run_timescale", "space_state_weapon", 0, "ground_move", "space_state_weapon", 1, "in_air_state", "space_state", 0, "has_gun", "space_state", 1, "Animation 5", "has_gun", 0, "space_state_weapon", "has_gun", 1, "weapon_reload", "weapon_reload", 0, "aim_blend", "weapon_reload", 1, "Animation" ]
+node_connections = [ "output", 0, "is_alive", "is_alive", 0, "space_state", "is_alive", 1, "Animation 2", "run_timescale", 0, "run_blend", "in_air_state", 0, "jump_blend", "in_air_state", 1, "fall_blend", "ground_move", 0, "idle_blend", "ground_move", 1, "run_timescale", "weapon_reload", 0, "aim_blend", "weapon_reload", 1, "Animation", "space_state_weapon", 0, "ground_move", "space_state_weapon", 1, "in_air_state", "space_state", 0, "has_gun", "space_state", 1, "Animation 5", "has_gun", 0, "space_state_weapon", "has_gun", 1, "weapon_reload" ]

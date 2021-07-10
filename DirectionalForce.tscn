@@ -6,10 +6,12 @@
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.683721, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.118182 ), 0.0, 0.0, 0, 0 ]
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 50, 32 )
+extents = Vector2( 125, 32 )
 
 [node name="DirectionalForce" type="Area2D"]
 monitorable = false
+collision_layer = 0
+collision_mask = 520
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_group_": true

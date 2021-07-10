@@ -4,10 +4,20 @@
 [ext_resource path="res://StickmanEnemy.gd" type="Script" id=2]
 
 [node name="StickmanEnemy" instance=ExtResource( 1 )]
+collision_layer = 1536
+collision_mask = 1029
 script = ExtResource( 2 )
 
-[node name="StickmanVisual" parent="." index="5"]
-TintColor = Color( 0.772549, 0, 0, 1 )
+[node name="WeaponSlot" parent="." index="4"]
+position = Vector2( -12.2282, -31.4951 )
+rotation = 1.57535
+scale = Vector2( 3, 3 )
+
+[node name="Gun" parent="WeaponSlot" index="0"]
+Damage = 5.0
+
+[node name="WeaponWallDetector" parent="Rays" index="0"]
+position = Vector2( 0.00229923, -40.4916 )
 
 [node name="UpdateNavTimer" type="Timer" parent="." index="6"]
 process_mode = 0
@@ -16,5 +26,9 @@ autostart = true
 
 [node name="EnemyDetector" type="RayCast2D" parent="." index="7"]
 position = Vector2( 0, -37 )
+collision_mask = 513
+
+[node name="StickmanVisual" parent="." index="8"]
+TintColor = Color( 0.772549, 0, 0, 1 )
 
 [connection signal="timeout" from="UpdateNavTimer" to="." method="_on_UpdateNavTimer_timeout"]

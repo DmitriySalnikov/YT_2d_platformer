@@ -10,7 +10,7 @@ func _ready() -> void:
 
 func _on_LevelSwitcher_body_entered(body: Node) -> void:
 	if not LevelName.empty():
-		if body is StickmanHero:
+		if body is StickmanPlayer:
 			var scn = load("res://Levels/"+LevelName+".tscn")
 			if scn:
 				LevelSwitchFade.set_character(body)

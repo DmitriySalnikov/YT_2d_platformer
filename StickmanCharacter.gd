@@ -1,6 +1,8 @@
 class_name StickmanCharacter
 extends KinematicBody2D
 
+signal ammo_updated(in_mag, total)
+
 enum WeaponTypes{
 	None,
 	Gun
@@ -24,13 +26,14 @@ export(Curve) var OnWallGravityCurve : Curve
 export var OnWallStillHoldingTime := 1.8
 export var CurrentWeaponType : int = WeaponTypes.None setget set_current_weapon
 
+onready var health_comp := $HealthComp
 onready var stickman_visual := $StickmanVisual
 onready var capsule_collison := $CS2D
 onready var rays := $Rays
 
 onready var weapon_slot := $WeaponSlot
 onready var weapon_wall_detector := $Rays/WeaponWallDetector
-onready var current_weapon : Node2D
+onready var current_weapon : Node2D = null
 onready var weapons_map := {
 	WeaponTypes.None : null,
 	WeaponTypes.Gun : $WeaponSlot/Gun,
@@ -70,34 +73,72 @@ func _ready() -> void:
 		if c != null:
 			c.setup(self, get_parent())
 	
+	_connect_to_signals()
 	var tmp_type = CurrentWeaponType
 	CurrentWeaponType = -1
 	set_current_weapon(tmp_type)
-	_connect_to_stickman()
 
-func _connect_to_stickman():
+func _connect_to_signals():
 	# warning-ignore:return_value_discarded
 	stickman_visual.connect("weapon_drop_mag", self, "drop_weapon_mag")
 	# warning-ignore:return_value_discarded
 	stickman_visual.connect("weapon_create_mag", self, "create_weapon_mag")
 	# warning-ignore:return_value_discarded
 	stickman_visual.connect("weapon_attach_mag", self, "attach_weapon_mag")
+	# warning-ignore:return_value_discarded
+	stickman_visual.connect("weapon_reload_finished", self, "weapon_reload_finished")
+	# warning-ignore:return_value_discarded
+	stickman_visual.connect("weapon_reload_started", self, "weapon_reload_started")
+	# warning-ignore:return_value_discarded
+	health_comp.connect("dead", self, "on_dead")
+	# warning-ignore:return_value_discarded
+	health_comp.connect("resurrected", self, "on_resurrected")
 
 func _physics_process(_delta: float) -> void:
-	process_input()
+	if health_comp.is_alive():
+		process_input()
+		
+		weapons()
+		run()
+		on_wall()
+		jump()
+	else:
+		# stop dead body..
+		velocity.x = lerp(velocity.x, 0, 0.2)
 	
-	weapons()
-	run()
-	on_wall()
-	jump()
 	gravity()
 	
 	velocity = move_and_slide_with_snap(velocity, (Vector2.DOWN * 12 if snap_to_ground else Vector2.ZERO), Vector2.UP, false)
 	
-	animations()
+	if health_comp.is_alive():
+		animations()
 
 func process_input():
 	pass
+
+# =================================
+# Health Component
+
+func on_dead():
+	stickman_visual.IsAlive = stickman_visual.EIsAliveState.dead
+	is_holding_on_wall = false
+	velocity = Vector2.ZERO
+	set_collision_layer_bit(9, false)
+	
+	on_dead_virtual()
+
+func on_dead_virtual():
+	pass
+
+func on_resurrected():
+	stickman_visual.IsAlive = stickman_visual.EIsAliveState.alive
+	set_collision_layer_bit(9, true)
+	
+	on_resurrected_virtual()
+
+func on_resurrected_virtual():
+	pass
+
 
 # =================================
 # Weapons
@@ -105,10 +146,10 @@ func process_input():
 func weapons():
 	if input_fire_pressed and is_can_use_weapon:
 		if current_weapon and CurrentWeaponType != WeaponTypes.None and not is_holding_on_wall:
-			current_weapon.spawn_bullet()
+			current_weapon.shoot()
 	if input_next_weapon_just_pressed:
 		self.CurrentWeaponType = wrapi(CurrentWeaponType + 1, 0, WeaponTypes.size())
-	if input_reload_just_pressed:
+	if current_weapon and ((input_reload_just_pressed and current_weapon.is_can_reload()) or current_weapon.is_need_reload()):
 		stickman_visual.WeaponReload = true
 
 func drop_weapon_mag():
@@ -122,6 +163,40 @@ func create_weapon_mag():
 func attach_weapon_mag():
 	if current_weapon:
 		current_weapon.attach_mag()
+
+func weapon_reload_finished():
+	if current_weapon:
+		current_weapon.roload_finished()
+
+func weapon_reload_started():
+	if current_weapon:
+		current_weapon.roload_started()
+
+func weapon_ammo_in_mag(weapon) -> int:
+	if weapon:
+		return weapon.ammo_in_mag
+	return -1
+
+func weapon_ammo_total(weapon) -> int:
+	if weapon:
+		return weapon.total_ammo
+	return -1
+
+func weapon_ammo_updated(mag, total):
+	emit_signal("ammo_updated", mag, total)
+
+func connect_weapon_signals(prev : Node2D, next : Node2D):
+	if prev and prev.is_connected("ammo_updated", self, "weapon_ammo_updated"):
+		prev.disconnect("ammo_updated", self, "weapon_ammo_updated")
+	
+	if next:
+		if not next.is_connected("ammo_updated", self, "weapon_ammo_updated"):
+			# warning-ignore:return_value_discarded
+			next.connect("ammo_updated", self, "weapon_ammo_updated")
+		
+		weapon_ammo_updated(weapon_ammo_in_mag(next), weapon_ammo_total(next))
+	else:
+		weapon_ammo_updated(-1, -1)
 
 # =================================
 # Run
@@ -304,11 +379,15 @@ func set_current_weapon(val : int):
 		if stickman_visual:
 			stickman_visual.HasGun = CurrentWeaponType != WeaponTypes.None
 		if weapon_slot:
-			for c in weapon_slot.get_children():
-				if CurrentWeaponType == WeaponTypes.None:
-					pass
-				else:
+			if CurrentWeaponType == WeaponTypes.None:
+					current_weapon = null
+					connect_weapon_signals(current_weapon, null)
+			else:
+				for c in weapon_slot.get_children():
 					if c == weapons_map[CurrentWeaponType]:
+						connect_weapon_signals(current_weapon, c)
+						c.equiped()
+						
 						current_weapon = c
 						c.visible = true
 					else:
