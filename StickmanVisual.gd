@@ -25,6 +25,8 @@ enum EGroundMove { idle, run }
 const ground_move_name := "parameters/ground_move/blend_amount"
 var GroundMove := 0.0 setget set_ground_move, get_ground_move
 
+var IsMovingBackward := false setget set_is_moving_back, get_is_moving_back
+
 const run_timescale_name := "parameters/run_timescale/scale"
 var RunTimescale := 0.0 setget set_run_timescale, get_run_timescale
 
@@ -46,6 +48,7 @@ var WeaponReload := false setget set_weapon_reload, get_weapon_reload
 const has_gun_name := "parameters/has_gun/add_amount"
 const idle_blend_name := "parameters/idle_blend/blend_position"
 const run_blend_name := "parameters/run_blend/blend_position"
+const run_blend_base_name := "parameters/run_blend/"
 const jump_blend_name := "parameters/jump_blend/blend_position"
 const fall_blend_name := "parameters/fall_blend/blend_position"
 var HasGun := false setget set_has_gun, get_has_gun
@@ -118,6 +121,19 @@ func set_ground_move(val : float):
 
 func get_ground_move() -> float:
 	return anim_tree.get(ground_move_name)
+
+# is backward
+func set_is_moving_back(val : bool):
+	anim_smoother.interpolate_method(self, "update_is_moving_back_values", anim_tree.get(run_blend_base_name + "0/blend_position"), -1 if val else 1, 0.15)
+	anim_smoother.start()
+
+func get_is_moving_back() -> bool:
+	return anim_tree.get(run_blend_base_name + "0/blend_position") < 0
+
+func update_is_moving_back_values(val : float):
+	# iterate over all blends
+	for i in range(2):
+		anim_tree.set(run_blend_base_name + str(i) + "/blend_position", val)
 
 # run_timescale
 func set_run_timescale(val : float):

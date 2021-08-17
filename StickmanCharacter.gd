@@ -22,6 +22,7 @@ export(float, 0, 3000) var GroundSpeedNormalAnimScale := 400.0
 export(float, 0, 1) var JumpCoyoteTime := 0.1
 export(float, 0.001, 1) var JumpDefferedTime := 0.1
 export(float, 0, 25000) var JumpStrength := 1300.0
+export(float, 0, 10) var WallJumpManualRotationBlockTime := 0.25
 export(Curve) var OnWallGravityCurve : Curve
 export var OnWallStillHoldingTime := 1.8
 export var CurrentWeaponType : int = WeaponTypes.None setget set_current_weapon
@@ -29,6 +30,7 @@ export var CurrentWeaponType : int = WeaponTypes.None setget set_current_weapon
 onready var health_comp := $HealthComp
 onready var stickman_visual := $StickmanVisual
 onready var capsule_collison := $CS2D
+onready var slope_ray_collision := $CSSlopeRay
 onready var rays := $Rays
 
 onready var weapon_slot := $WeaponSlot
@@ -47,6 +49,7 @@ var input_look_angle : float
 var input_fire_pressed : bool
 var input_next_weapon_just_pressed : bool
 var input_reload_just_pressed : bool
+var enable_onfloor_manual_rotation : bool = false
 
 var snap_to_ground := false
 var is_on_floor_coyote := false
@@ -60,7 +63,8 @@ var is_facing_right_sign := 1
 
 var is_holding_on_wall := false
 var wall_detectors := []
-var wall_holding_time := 0.0
+var wall_holding_timer := 0.0
+var wall_jump_manual_rotation_timer := 0.0
 
 func _ready() -> void:
 	for c in wall_detectors_root.get_children():
@@ -221,16 +225,20 @@ func run():
 func jump():
 	# deffered jump
 	jump_deffered_timer -= get_physics_process_delta_time()
+	wall_jump_manual_rotation_timer -= get_physics_process_delta_time()
+	
 	if input_jump_just_pressed:
 		jump_deffered_timer = JumpDefferedTime
 	
 	if is_holding_on_wall:
 		#calculate_coyote_jump(true)
-		wall_holding_time -= get_physics_process_delta_time()
+		wall_holding_timer -= get_physics_process_delta_time()
 		
 		if jump_deffered_timer > 0:# and is_on_floor_coyote:
 			is_on_floor_coyote = false
 			stickman_visual.InAirState = stickman_visual.EInAirState.jump
+			
+			wall_jump_manual_rotation_timer = WallJumpManualRotationBlockTime
 			
 			var dir = Vector2(is_facing_right_sign * -1, -1.2).normalized()
 			rotate_character_dir(dir.x)
@@ -276,7 +284,7 @@ func on_wall():
 			# if on the wall and nothing is trying to move the character
 			if is_wall_colliding and (sign(velocity.x) == is_facing_right_sign or velocity.x == 0):
 				is_holding_on_wall = true
-				wall_holding_time = OnWallStillHoldingTime
+				wall_holding_timer = OnWallStillHoldingTime
 				var width = capsule_collison.shape.radius
 				global_position.x = get_wall_collision_point().x + (width * (is_facing_right_sign * -1))
 				
@@ -288,8 +296,10 @@ func on_wall():
 
 func gravity():
 	if is_holding_on_wall:
-		# FIX ME
-		velocity.y += GRAVITY * MaxGravitySpeedOnWallScale * OnWallGravityCurve.interpolate(wall_holding_time/ OnWallStillHoldingTime)
+		slope_ray_collision.disabled = false
+		
+		# FIX ME with fan
+		velocity.y += GRAVITY * MaxGravitySpeedOnWallScale * OnWallGravityCurve.interpolate(wall_holding_timer/ OnWallStillHoldingTime)
 		
 		var spd = MaxGravitySpeed * MaxGravitySpeedOnWallScale
 		if velocity.y > spd:
@@ -300,12 +310,22 @@ func gravity():
 		
 		if velocity.y > MaxGravitySpeed:
 			velocity.y = MaxGravitySpeed
+		
+		if velocity.y < 0:
+			slope_ray_collision.disabled = true
+		else:
+			slope_ray_collision.disabled = false
 
 # =================================
 # Animations
 
 func animations():
 	# run / idle
+	var is_manually_moving_backwards = false
+	if is_can_manually_rotate() and abs(velocity.x) > 15.0:
+		is_manually_moving_backwards = sign(velocity.x) != is_facing_right_sign
+	stickman_visual.IsMovingBackward = is_manually_moving_backwards
+	
 	stickman_visual.GroundMove = stickman_visual.EGroundMove.run if (input_move_vector != 0 and abs(velocity.x) > 15.0) else stickman_visual.EGroundMove.idle
 	if abs(velocity.x) > 0:
 		stickman_visual.RunTimescale = clamp(abs(velocity.x) / GroundSpeedNormalAnimScale, 0.5, 2)
@@ -342,8 +362,13 @@ func rotate_weapon_wall_detector(angle):
 func apply_force(force : Vector2):
 	velocity += force
 
+func is_can_manually_rotate() -> bool:
+	return enable_onfloor_manual_rotation \
+					and is_on_floor_coyote \
+					and (not is_holding_on_wall and wall_jump_manual_rotation_timer < 0)
+
 func rotate_character_dir(dir : float):
-	if dir == 0:
+	if dir == 0 or is_can_manually_rotate():
 		return
 	
 	rotate_character(dir > 0)

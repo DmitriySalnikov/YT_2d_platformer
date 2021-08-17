@@ -55,15 +55,14 @@ SpawnPointName = "from_level2"
 position = Vector2( 888, 520 )
 
 [node name="WeaponSlot" parent="StickmanEnemy" index="4"]
-position = Vector2( -12.1651, -30.2395 )
-rotation = 1.6024
-scale = Vector2( 3, 3 )
+position = Vector2( -7.00446, -33.3947 )
+rotation = 2.06367
 
 [node name="Gun" parent="StickmanEnemy/WeaponSlot" index="0"]
 Damage = 0.577
 
 [node name="WeaponWallDetector" parent="StickmanEnemy/Rays" index="0"]
-position = Vector2( 0.304321, -38.9019 )
+position = Vector2( 8.01727, -35.6019 )
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." index="9"]
 position = Vector2( 480, 8 )

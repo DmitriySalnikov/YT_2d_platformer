@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=27 format=2]
+[gd_resource type="AnimationNodeBlendTree" load_steps=31 format=2]
 
 [sub_resource type="AnimationNodeAnimation" id=1]
 animation = "Dead"
@@ -83,17 +83,35 @@ blend_point_1/pos = 1.0
 animation = "Run"
 
 [sub_resource type="AnimationNodeAnimation" id=21]
-animation = "RunWeapon"
+animation = "RunBack"
 
 [sub_resource type="AnimationNodeBlendSpace1D" id=22]
 blend_point_0/node = SubResource( 20 )
-blend_point_0/pos = 0.0
+blend_point_0/pos = 1.0
 blend_point_1/node = SubResource( 21 )
+blend_point_1/pos = -1.0
+
+[sub_resource type="AnimationNodeAnimation" id=23]
+animation = "RunWeapon"
+
+[sub_resource type="AnimationNodeAnimation" id=24]
+animation = "RunWeaponBack"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=25]
+blend_point_0/node = SubResource( 23 )
+blend_point_0/pos = 1.0
+blend_point_1/node = SubResource( 24 )
+blend_point_1/pos = -1.0
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=26]
+blend_point_0/node = SubResource( 22 )
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource( 25 )
 blend_point_1/pos = 1.0
 
-[sub_resource type="AnimationNodeTimeScale" id=23]
+[sub_resource type="AnimationNodeTimeScale" id=27]
 
-[sub_resource type="AnimationNodeTransition" id=24]
+[sub_resource type="AnimationNodeTransition" id=28]
 input_count = 2
 xfade_time = 0.15
 input_0/name = "weapon"
@@ -101,7 +119,7 @@ input_0/auto_advance = false
 input_1/name = "wall"
 input_1/auto_advance = false
 
-[sub_resource type="AnimationNodeTransition" id=25]
+[sub_resource type="AnimationNodeTransition" id=29]
 input_count = 2
 xfade_time = 0.1
 input_0/name = "ground"
@@ -109,10 +127,10 @@ input_0/auto_advance = false
 input_1/name = "air"
 input_1/auto_advance = false
 
-[sub_resource type="AnimationNodeOneShot" id=26]
+[sub_resource type="AnimationNodeOneShot" id=30]
 
 [resource]
-graph_offset = Vector2( 471, -64 )
+graph_offset = Vector2( -1100, 22 )
 nodes/Animation/node = SubResource( 3 )
 nodes/Animation/position = Vector2( -160, 280 )
 "nodes/Animation 2/node" = SubResource( 1 )
@@ -136,14 +154,14 @@ nodes/is_alive/position = Vector2( 1200, -60 )
 nodes/jump_blend/node = SubResource( 19 )
 nodes/jump_blend/position = Vector2( -600, 280 )
 nodes/output/position = Vector2( 1380, -60 )
-nodes/run_blend/node = SubResource( 22 )
+nodes/run_blend/node = SubResource( 26 )
 nodes/run_blend/position = Vector2( -800, 120 )
-nodes/run_timescale/node = SubResource( 23 )
+nodes/run_timescale/node = SubResource( 27 )
 nodes/run_timescale/position = Vector2( -600, 120 )
-nodes/space_state/node = SubResource( 24 )
+nodes/space_state/node = SubResource( 28 )
 nodes/space_state/position = Vector2( 800, -60 )
-nodes/space_state_weapon/node = SubResource( 25 )
+nodes/space_state_weapon/node = SubResource( 29 )
 nodes/space_state_weapon/position = Vector2( -160, -20 )
-nodes/weapon_reload/node = SubResource( 26 )
+nodes/weapon_reload/node = SubResource( 30 )
 nodes/weapon_reload/position = Vector2( 200, 140 )
-node_connections = [ "output", 0, "is_alive", "is_alive", 0, "space_state", "is_alive", 1, "Animation 2", "run_timescale", 0, "run_blend", "in_air_state", 0, "jump_blend", "in_air_state", 1, "fall_blend", "ground_move", 0, "idle_blend", "ground_move", 1, "run_timescale", "weapon_reload", 0, "aim_blend", "weapon_reload", 1, "Animation", "space_state_weapon", 0, "ground_move", "space_state_weapon", 1, "in_air_state", "space_state", 0, "has_gun", "space_state", 1, "Animation 5", "has_gun", 0, "space_state_weapon", "has_gun", 1, "weapon_reload" ]
+node_connections = [ "output", 0, "is_alive", "is_alive", 0, "space_state", "is_alive", 1, "Animation 2", "weapon_reload", 0, "aim_blend", "weapon_reload", 1, "Animation", "ground_move", 0, "idle_blend", "ground_move", 1, "run_timescale", "run_timescale", 0, "run_blend", "space_state_weapon", 0, "ground_move", "space_state_weapon", 1, "in_air_state", "in_air_state", 0, "jump_blend", "in_air_state", 1, "fall_blend", "space_state", 0, "has_gun", "space_state", 1, "Animation 5", "has_gun", 0, "space_state_weapon", "has_gun", 1, "weapon_reload" ]

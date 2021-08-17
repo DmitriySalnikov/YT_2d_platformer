@@ -44,8 +44,8 @@ z_index = -2
 shape = SubResource( 3 )
 
 [node name="WeaponSlot" type="Node2D" parent="."]
-position = Vector2( -12.1592, -30.1288 )
-rotation = 1.60479
+position = Vector2( -5.97954, -34.4328 )
+rotation = 2.10065
 scale = Vector2( 3, 3 )
 
 [node name="Gun" parent="WeaponSlot" instance=ExtResource( 5 )]
@@ -53,7 +53,7 @@ scale = Vector2( 3, 3 )
 [node name="Rays" type="Node2D" parent="."]
 
 [node name="WeaponWallDetector" type="RayCast2D" parent="Rays"]
-position = Vector2( 0.330911, -38.7614 )
+position = Vector2( 9.11352, -36.0831 )
 enabled = true
 exclude_parent = false
 cast_to = Vector2( 46, 0 )
