@@ -31,22 +31,22 @@ export var OnWallStillHoldingTime := 1.8
 export var CurrentWeaponType : int = WeaponTypes.Gun setget set_current_weapon
 
 onready var health_comp := $HealthComp
-onready var stickman_visual := $StickmanVisual
-onready var capsule_collison := $CS2D
-onready var slope_ray_collision := $CSSlopeRay
-onready var rays := $Rays
+onready var stickman_visual : = $StickmanVisual
+onready var capsule_collison : CollisionShape2D = $CS2D
+onready var slope_ray_collision : CollisionShape2D = $CSSlopeRay
+onready var rays : Node2D = $Rays
 
-onready var weapon_slot := $WeaponSlot
-onready var weapon_wall_detector := $Rays/WeaponWallDetector
+onready var weapon_slot : Node2D = $WeaponSlot
+onready var weapon_wall_detector : RayCast2D = $Rays/WeaponWallDetector
 onready var current_weapon : Node2D = null
 onready var weapons_map := {
 	WeaponTypes.None : null,
 	WeaponTypes.Gun : $WeaponSlot/Gun,
 }
 
-onready var wall_detectors_root := $Rays/WallDetectors
-onready var two_way_platform_checker := $Rays/TwoWayPlatformChecker
-onready var tween := $Tween
+onready var wall_detectors_root : Node2D = $Rays/WallDetectors
+onready var two_way_platform_checker : RayCast2D = $Rays/TwoWayPlatformChecker
+onready var tween : Tween = $Tween
 
 var input_move_direction : float
 var input_look_direction : float
@@ -287,18 +287,18 @@ func jump():
 			# jump through oneway platform
 			# on "twoway" platform and looking down
 			if two_way_platform_checker.is_colliding() and input_look_direction > 0:
-				print("wtf" + str(OS.get_ticks_msec()))
 				_do_jump_through_platform()
 			else:
 				_do_regular_jump()
 
 func test_distance_covered_after_platforms_disabled():
-	if is_jumping_through_platforms and jump_down_platform_distance_vertical > 8:
+	if is_jumping_through_platforms and jump_down_platform_distance_vertical > 14:
 		_stop_ignoring_platforms()
 
 func _stop_ignoring_platforms():
 	is_jumping_through_platforms = false
 	set_collision_mask_bit(TWOWAY_PlATFORMS_LAYER_BIT, true)
+	# warning-ignore:return_value_discarded
 	tween.remove(self, "_stop_ignoring_platforms")
 
 func _do_jump_through_platform():
@@ -308,7 +308,9 @@ func _do_jump_through_platform():
 	jump_down_platform_distance_vertical = 0
 	jump_coyote_timer = 0
 	# TODO also need to just check is moved some pixels
+	# warning-ignore:return_value_discarded
 	tween.interpolate_callback(self, 0.15, "_stop_ignoring_platforms")
+	# warning-ignore:return_value_discarded
 	tween.start()
 
 func _do_regular_jump():
