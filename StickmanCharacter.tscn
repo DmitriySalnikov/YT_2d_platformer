@@ -17,7 +17,7 @@ length = 13.0
 
 [node name="StickmanCharacter" type="KinematicBody2D"]
 collision_layer = 512
-collision_mask = 5
+collision_mask = 13
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_horizontal_guides_": [ 59.3956 ],
@@ -36,7 +36,7 @@ shape = SubResource( 2 )
 [node name="CP2D" type="CollisionPolygon2D" parent="."]
 position = Vector2( 0, 45.9405 )
 z_index = -2
-polygon = PoolVector2Array( -8, 0, -2, 8, 0, 10, 2, 8, 8, 0 )
+polygon = PoolVector2Array( -8.8, 0, -2, 8, 0, 10, 2, 8, 8.8, 0 )
 
 [node name="CSSlopeRay" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 46.5625 )
@@ -44,16 +44,22 @@ z_index = -2
 shape = SubResource( 3 )
 
 [node name="WeaponSlot" type="Node2D" parent="."]
-position = Vector2( -5.97954, -34.4328 )
-rotation = 2.10065
+position = Vector2( -7.85528, -32.379 )
+rotation = 2.03095
 scale = Vector2( 3, 3 )
 
 [node name="Gun" parent="WeaponSlot" instance=ExtResource( 5 )]
 
 [node name="Rays" type="Node2D" parent="."]
 
+[node name="TwoWayPlatformChecker" type="RayCast2D" parent="Rays"]
+position = Vector2( 0, 55.4526 )
+enabled = true
+cast_to = Vector2( 0, 5 )
+collision_mask = 4
+
 [node name="WeaponWallDetector" type="RayCast2D" parent="Rays"]
-position = Vector2( 9.11352, -36.0831 )
+position = Vector2( 7.08621, -35.0764 )
 enabled = true
 exclude_parent = false
 cast_to = Vector2( 46, 0 )
@@ -83,3 +89,5 @@ collision_mask = 2
 [node name="StickmanVisual" parent="." instance=ExtResource( 2 )]
 WeaponSlotPath = NodePath("../WeaponSlot")
 WeaponWallDetectorPath = NodePath("../Rays/WeaponWallDetector")
+
+[node name="Tween" type="Tween" parent="."]

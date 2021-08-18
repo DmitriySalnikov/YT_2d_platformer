@@ -99,8 +99,9 @@ pointing/emulate_touch_from_mouse=true
 
 2d_physics/layer_1="Solid"
 2d_physics/layer_2="GripWalls"
-2d_physics/layer_3="OneWayPlatforms"
-2d_physics/layer_4="Props"
+2d_physics/layer_3="TwoWayPlatforms"
+2d_physics/layer_4="OneWayPlatforms"
+2d_physics/layer_9="Props"
 2d_physics/layer_10="Characters"
 2d_physics/layer_11="Enemies"
 

@@ -8,6 +8,9 @@ enum WeaponTypes{
 	Gun
 }
 
+const ENEMIES_LAYER_BIT = 10
+const TWOWAY_PlATFORMS_LAYER_BIT = 2
+
 export var StickmanScale := Vector2(3, 3)
 export var MoveAcceleration := 0.25
 export var MoveAccelerationInAir := 0.100
@@ -25,7 +28,7 @@ export(float, 0, 25000) var JumpStrength := 1300.0
 export(float, 0, 10) var WallJumpManualRotationBlockTime := 0.25
 export(Curve) var OnWallGravityCurve : Curve
 export var OnWallStillHoldingTime := 1.8
-export var CurrentWeaponType : int = WeaponTypes.None setget set_current_weapon
+export var CurrentWeaponType : int = WeaponTypes.Gun setget set_current_weapon
 
 onready var health_comp := $HealthComp
 onready var stickman_visual := $StickmanVisual
@@ -42,8 +45,11 @@ onready var weapons_map := {
 }
 
 onready var wall_detectors_root := $Rays/WallDetectors
+onready var two_way_platform_checker := $Rays/TwoWayPlatformChecker
+onready var tween := $Tween
 
-var input_move_vector : float
+var input_move_direction : float
+var input_look_direction : float
 var input_jump_just_pressed : bool
 var input_look_angle : float
 var input_fire_pressed : bool
@@ -51,10 +57,15 @@ var input_next_weapon_just_pressed : bool
 var input_reload_just_pressed : bool
 var enable_onfloor_manual_rotation : bool = false
 
+var prev_position := Vector2()
+var total_covered_distance := 0.0
+
 var snap_to_ground := false
 var is_on_floor_coyote := false
 var jump_coyote_timer := 0.0
 var jump_deffered_timer := 0.0
+var is_jumping_through_platforms := false
+var jump_down_platform_distance_vertical := 0.0
 
 var is_can_use_weapon := true
 var velocity := Vector2()
@@ -81,6 +92,8 @@ func _ready() -> void:
 	var tmp_type = CurrentWeaponType
 	CurrentWeaponType = -1
 	set_current_weapon(tmp_type)
+	
+	prev_position = global_position
 
 func _connect_to_signals():
 	# warning-ignore:return_value_discarded
@@ -113,11 +126,27 @@ func _physics_process(_delta: float) -> void:
 	gravity()
 	
 	velocity = move_and_slide_with_snap(velocity, (Vector2.DOWN * 12 if snap_to_ground else Vector2.ZERO), Vector2.UP, false)
+	distance_counter()
 	
 	if health_comp.is_alive():
 		animations()
 
 func process_input():
+	pass
+
+func distance_counter():
+	var dist = global_position.distance_to(prev_position)
+	var _dist_h = abs(global_position.x - prev_position.x)
+	var _dist_v = abs(global_position.y - prev_position.y)
+	prev_position = global_position
+	
+	# count here all other vars
+	distance_counter_virtual(dist, _dist_h, _dist_v)
+	
+	total_covered_distance += dist
+	jump_down_platform_distance_vertical += _dist_v
+
+func distance_counter_virtual(_dist : float, _dist_h : float, _dist_v : float):
 	pass
 
 # =================================
@@ -208,16 +237,16 @@ func connect_weapon_signals(prev : Node2D, next : Node2D):
 func run():
 	# horizontal movement
 	if is_on_floor():
-		if input_move_vector != 0:
-			velocity.x = lerp(velocity.x, input_move_vector * MaxGroundSpeed, MoveAcceleration)
+		if input_move_direction != 0:
+			velocity.x = lerp(velocity.x, input_move_direction * MaxGroundSpeed, MoveAcceleration)
 		else:
 			velocity.x = lerp(velocity.x, 0, MoveDeacceleration)
 	else:
-		if input_move_vector != 0:
-			velocity.x = lerp(velocity.x, input_move_vector * MaxGroundSpeed, MoveAccelerationInAir)
+		if input_move_direction != 0:
+			velocity.x = lerp(velocity.x, input_move_direction * MaxGroundSpeed, MoveAccelerationInAir)
 		else:
 			velocity.x = lerp(velocity.x, 0, MoveDeaccelerationInAir)
-	rotate_character_dir(input_move_vector)
+	rotate_character_dir(input_move_direction)
 
 # =================================
 # Jump
@@ -251,14 +280,45 @@ func jump():
 			is_holding_on_wall = false
 	else:
 		calculate_coyote_jump(is_on_floor())
+		test_distance_covered_after_platforms_disabled()
 		
-		if jump_deffered_timer > 0 and is_on_floor_coyote:
-			snap_to_ground = false
-			jump_deffered_timer = 0
-			is_on_floor_coyote = false
-			stickman_visual.InAirState = stickman_visual.EInAirState.jump
-			velocity.y = -JumpStrength
+		# is want to jump
+		if jump_deffered_timer > 0:
+			# jump through oneway platform
+			# on "twoway" platform and looking down
+			if two_way_platform_checker.is_colliding() and input_look_direction > 0:
+				print("wtf" + str(OS.get_ticks_msec()))
+				_do_jump_through_platform()
+			else:
+				_do_regular_jump()
 
+func test_distance_covered_after_platforms_disabled():
+	if is_jumping_through_platforms and jump_down_platform_distance_vertical > 8:
+		_stop_ignoring_platforms()
+
+func _stop_ignoring_platforms():
+	is_jumping_through_platforms = false
+	set_collision_mask_bit(TWOWAY_PlATFORMS_LAYER_BIT, true)
+	tween.remove(self, "_stop_ignoring_platforms")
+
+func _do_jump_through_platform():
+	set_collision_mask_bit(TWOWAY_PlATFORMS_LAYER_BIT, false)
+	
+	is_jumping_through_platforms = true
+	jump_down_platform_distance_vertical = 0
+	jump_coyote_timer = 0
+	# TODO also need to just check is moved some pixels
+	tween.interpolate_callback(self, 0.15, "_stop_ignoring_platforms")
+	tween.start()
+
+func _do_regular_jump():
+	# is on floor and can jump
+	if is_on_floor_coyote:
+		snap_to_ground = false
+		jump_deffered_timer = 0
+		is_on_floor_coyote = false
+		stickman_visual.InAirState = stickman_visual.EInAirState.jump
+		velocity.y = -JumpStrength
 
 func calculate_coyote_jump(is_grounded):
 	if is_grounded and velocity.y >= 0:
@@ -321,12 +381,14 @@ func gravity():
 
 func animations():
 	# run / idle
+	var min_speed = 5.0
 	var is_manually_moving_backwards = false
-	if is_can_manually_rotate() and abs(velocity.x) > 15.0:
+	
+	if is_can_manually_rotate() and abs(velocity.x) > min_speed:
 		is_manually_moving_backwards = sign(velocity.x) != is_facing_right_sign
 	stickman_visual.IsMovingBackward = is_manually_moving_backwards
 	
-	stickman_visual.GroundMove = stickman_visual.EGroundMove.run if (input_move_vector != 0 and abs(velocity.x) > 15.0) else stickman_visual.EGroundMove.idle
+	stickman_visual.GroundMove = stickman_visual.EGroundMove.run if (input_move_direction != 0 and abs(velocity.x) > min_speed) else stickman_visual.EGroundMove.idle
 	if abs(velocity.x) > 0:
 		stickman_visual.RunTimescale = clamp(abs(velocity.x) / GroundSpeedNormalAnimScale, 0.5, 2)
 	

@@ -9,14 +9,15 @@ collision_mask = 1029
 script = ExtResource( 2 )
 
 [node name="WeaponSlot" parent="." index="4"]
-position = Vector2( -7.47568, -33.7905 )
-rotation = 2.07272
+position = Vector2( -7.45631, -33.8548 )
+rotation = 2.07465
+scale = Vector2( 3, 3 )
 
 [node name="Gun" parent="WeaponSlot" index="0"]
 Damage = 5.0
 
-[node name="WeaponWallDetector" parent="Rays" index="0"]
-position = Vector2( 7.56541, -35.8617 )
+[node name="WeaponWallDetector" parent="Rays" index="1"]
+position = Vector2( 7.58875, -35.897 )
 
 [node name="UpdateNavTimer" type="Timer" parent="." index="6"]
 process_mode = 0

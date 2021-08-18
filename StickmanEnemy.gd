@@ -12,8 +12,9 @@ func _ready() -> void:
 
 func process_input():
 	_enemy_move()
+	_enemy_jump()
 	_enemy_weapon()
-	
+
 func _draw() -> void:
 	for p in range(last_path.size()-1):
 		var point : Vector2 = last_path[p]
@@ -21,29 +22,45 @@ func _draw() -> void:
 		draw_line(point - global_position, point2 - global_position, Color.red, 2)
 
 func _on_UpdateNavTimer_timeout() -> void:
-	last_path = navmap.get_simple_path(global_position, get_parent().get_node("StickmanPlayer").global_position)
+	if health_comp.is_alive():
+		last_path = navmap.get_simple_path(global_position, get_parent().get_node("StickmanPlayer").global_position)
+	else:
+		last_path = []
 	update()
 
 func on_dead_virtual():
-	set_collision_layer_bit(10, false)
-	set_collision_mask_bit(10, false)
+	set_collision_layer_bit(ENEMIES_LAYER_BIT, false)
+	set_collision_mask_bit(ENEMIES_LAYER_BIT, false)
 
 func on_resurrected_virtual():
-	set_collision_layer_bit(10, true)
-	set_collision_mask_bit(10, true)
+	set_collision_layer_bit(ENEMIES_LAYER_BIT, true)
+	set_collision_mask_bit(ENEMIES_LAYER_BIT, true)
 
 func _enemy_move():
+	self.input_look_direction = 0
+	
 	var dir = 0.0
+	# if path not empty
 	if last_path.size() > 1:
 		var vec : Vector2 = global_position - get_parent().get_node("StickmanPlayer").global_position
 		if vec.length() > 200:
 			var vec_to_point = last_path[1] - global_position
+			# if heights not equal and distance greater 200
 			if abs(vec_to_point.x) > 5:
 				vec_to_point.y = 0
 				dir = vec_to_point.normalized().x
 	
-	self.input_move_vector = dir
-	self.input_jump_just_pressed = false
+	self.input_move_direction = dir
+
+func _enemy_jump():
+	var need_to_jump = false
+	#not empty
+	if last_path.size() > 1:
+		var height_delta = (last_path[1] - last_path[0]).y
+		if height_delta < -50:
+			need_to_jump = true
+	
+	self.input_jump_just_pressed = need_to_jump
 
 func _enemy_weapon():
 	var player = get_parent().get_node("StickmanPlayer")
