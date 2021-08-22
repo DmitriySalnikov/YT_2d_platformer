@@ -1,11 +1,17 @@
 class_name StickmanEnemy
 extends StickmanCharacter
 
+export(float, 0, 5) var JumpCooldown := 0.1
+
 onready var enemy_detector := $EnemyDetector
 onready var next_floor_platform_checker := $Rays/NextPlatformFloorChecker
 
 var navmap : Navigation2D
 var last_path : Array
+
+var jump_cool_down_timer := 0.0
+var grounded_cool_down_timer := 0.0
+var is_grounded_after_jump := false
 
 # TODO add jump tries counter and limiter
 
@@ -56,6 +62,29 @@ func _enemy_move():
 	self.input_move_direction = dir
 
 func _enemy_jump():
+	self.input_jump_just_pressed = false
+	
+	##########################
+	# prevent to fast jumps
+	if jump_cool_down_timer > 0 or grounded_cool_down_timer > 0:
+		jump_cool_down_timer -= get_physics_process_delta_time()
+		grounded_cool_down_timer -= get_physics_process_delta_time()
+	
+	if jump_cool_down_timer > 0:
+		return
+	
+	if not is_grounded_after_jump:
+		if is_on_floor():
+			is_grounded_after_jump = true
+			grounded_cool_down_timer = 0.1
+		return
+	
+	if grounded_cool_down_timer > 0:
+		return
+	
+	
+	##########################
+	# actual jump calculations
 	var need_to_jump = false
 	#not empty
 	if last_path.size() > 1:
@@ -68,13 +97,21 @@ func _enemy_jump():
 			if last_path.size() != 2:
 				height_delta = (last_path[1] - Vector2(global_position.x, global_position.y - capsule_collison.shape.height + capsule_collison.shape.radius)).y
 			else:
-				height_delta = (last_path[1] - last_path[0]).y
+				height_delta = (last_path[1] - Vector2(last_path[0].x, last_path[0].y - capsule_collison.shape.height + capsule_collison.shape.radius)).y
+				#height_delta = (last_path[1] - last_path[0]).y
 			
 			if height_delta > 0 and two_way_platform_checker.is_colliding():
 				self.input_look_direction = 1
 				need_to_jump = true
 	
 	self.input_jump_just_pressed = need_to_jump
+	
+	
+	#########################
+	# reset values to prevent too fast jumps
+	if need_to_jump:
+		jump_cool_down_timer = JumpCooldown
+		is_grounded_after_jump = false
 
 func _enemy_weapon():
 	var player = get_parent().get_node("StickmanPlayer")

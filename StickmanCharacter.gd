@@ -292,7 +292,7 @@ func jump():
 				_do_regular_jump()
 
 func test_distance_covered_after_platforms_disabled():
-	if is_jumping_through_platforms and jump_down_platform_distance_vertical > 14:
+	if is_jumping_through_platforms and jump_down_platform_distance_vertical > 20:
 		_stop_ignoring_platforms()
 
 func _stop_ignoring_platforms():
@@ -305,11 +305,15 @@ func _do_jump_through_platform():
 	set_collision_mask_bit(TWOWAY_PlATFORMS_LAYER_BIT, false)
 	
 	is_jumping_through_platforms = true
+	jump_deffered_timer = 0
 	jump_down_platform_distance_vertical = 0
-	jump_coyote_timer = 0
-	# TODO also need to just check is moved some pixels
+	
+	# prevent coyote jump
+	#is_on_floor_coyote = false
+	#jump_coyote_timer = 0
+	
 	# warning-ignore:return_value_discarded
-	tween.interpolate_callback(self, 0.15, "_stop_ignoring_platforms")
+	tween.interpolate_callback(self, 0.25, "_stop_ignoring_platforms")
 	# warning-ignore:return_value_discarded
 	tween.start()
 
@@ -323,7 +327,7 @@ func _do_regular_jump():
 		velocity.y = -JumpStrength
 
 func calculate_coyote_jump(is_grounded):
-	if is_grounded and velocity.y >= 0:
+	if is_grounded and velocity.y >= 0 and not is_jumping_through_platforms:
 		snap_to_ground = true
 		is_on_floor_coyote = true
 		jump_coyote_timer = JumpCoyoteTime

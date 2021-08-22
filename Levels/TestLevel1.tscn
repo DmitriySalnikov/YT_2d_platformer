@@ -38,7 +38,7 @@ extents = Vector2( 307.239, 10 )
 
 [node name="TestLevel1" instance=ExtResource( 10 )]
 
-[node name="NavigationPolygonInstance" type="NavigationPolygonInstance" parent="Navigation2D" index="0"]
+[node name="NavigationPolygonInstance2" type="NavigationPolygonInstance" parent="Navigation2D" index="0"]
 navpoly = SubResource( 1 )
 
 [node name="Solids" parent="." index="1"]
@@ -92,4 +92,4 @@ SpawnPointName = "from_level1"
 position = Vector2( 1424, 480 )
 
 [node name="SpawnPoint" parent="." index="12"]
-position = Vector2( 720, 184 )
+position = Vector2( 1072, 576 )

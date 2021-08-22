@@ -9,7 +9,7 @@ signal weapon_reload_started
 signal weapon_reload_finished
 
 export var TintColor := Color.white setget set_stickman_tint
-export var TintGrayCurve : Curve
+export var TintGrayCurve : Curve setget set_stickman_tint_curve
 
 export var WeaponSlotPath : NodePath
 onready var WeaponSlot : Node2D = null
@@ -72,7 +72,7 @@ var weapon_transition_start_transform : Transform2D
 var weapon_transition_end_rt : RemoteTransform2D
 
 func _ready() -> void:
-	if not get_parent() is Viewport:
+	if get_parent() and not get_parent() is Viewport:
 		anim_tree.active = true
 		
 		WeaponSlot = get_node(WeaponSlotPath)
@@ -99,8 +99,13 @@ func set_stickman_tint(val : Color):
 	TintColor = val
 	update_stickman_color()
 
+# tint curve
+func set_stickman_tint_curve(val : Curve):
+	TintGrayCurve = val
+	update_stickman_color()
+
 func update_stickman_color():
-	if $Root/ArmRight:
+	if has_node("Root/ArmRight") and TintGrayCurve:
 		var full_tint = [$Root/ArmRight, $Root/LegRight, $Root/Spine1]
 		var grayed_tint = [$Root/ArmLeft, $Root/LegLeft]
 		

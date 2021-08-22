@@ -12785,14 +12785,13 @@ __meta__ = {
 TintGrayCurve = SubResource( 1 )
 
 [node name="Root" type="Node2D" parent="."]
-position = Vector2( -2.868, 0.0397243 )
 
 [node name="ArmLeft" type="Line2D" parent="Root"]
 modulate = Color( 0.709091, 0.709091, 0.709091, 1 )
 self_modulate = Color( 0.588235, 0.588235, 0.588235, 1 )
 show_behind_parent = true
-position = Vector2( 4.79455, -10.9299 )
-rotation = 2.01524
+position = Vector2( 0.0664525, -11.5504 )
+rotation = 1.69473
 z_index = -1
 points = PoolVector2Array( 0, 0, 8, 0 )
 width = 2.0
@@ -12809,7 +12808,7 @@ __meta__ = {
 [node name="ALBottom" type="Line2D" parent="Root/ArmLeft"]
 self_modulate = Color( 0.588235, 0.588235, 0.588235, 1 )
 position = Vector2( 8, 0 )
-rotation = -1.08505
+rotation = -0.357423
 z_index = -1
 points = PoolVector2Array( 0, 0, 8, 0 )
 width = 2.0
@@ -12841,7 +12840,8 @@ __meta__ = {
 modulate = Color( 0.709091, 0.709091, 0.709091, 1 )
 self_modulate = Color( 0.588235, 0.588235, 0.588235, 1 )
 show_behind_parent = true
-rotation = 1.16556
+position = Vector2( 0, 0.443339 )
+rotation = 1.25369
 z_index = -1
 points = PoolVector2Array( 0, 0, 10, 0 )
 width = 2.0
@@ -12859,7 +12859,7 @@ __meta__ = {
 [node name="LLBottom" type="Line2D" parent="Root/LegLeft"]
 self_modulate = Color( 0.588235, 0.588235, 0.588235, 1 )
 position = Vector2( 10, 0 )
-rotation = 0.644842
+rotation = 0.559904
 z_index = -1
 points = PoolVector2Array( 0, 0, 10, 0 )
 width = 2.0
@@ -12882,7 +12882,8 @@ __meta__ = {
 }
 
 [node name="Spine1" type="Line2D" parent="Root"]
-rotation = 0.282955
+position = Vector2( 0, 0.443339 )
+rotation = -0.0371903
 points = PoolVector2Array( 0, 0, 0, -4 )
 width = 2.0
 default_color = Color( 1, 1, 1, 1 )
@@ -12915,7 +12916,7 @@ __meta__ = {
 
 [node name="Spine2" type="Line2D" parent="Root/Spine1"]
 position = Vector2( 0, -4 )
-rotation = 0.136849
+rotation = 0.0520237
 points = PoolVector2Array( 0, 0, 0, -4 )
 width = 2.0
 default_color = Color( 1, 1, 1, 1 )
@@ -12929,7 +12930,7 @@ __meta__ = {
 
 [node name="Spine3" type="Line2D" parent="Root/Spine1/Spine2"]
 position = Vector2( 0, -4 )
-rotation = 0.117545
+rotation = 0.0241384
 points = PoolVector2Array( 0, 0, 0, -4 )
 width = 2.0
 default_color = Color( 1, 1, 1, 1 )
@@ -12978,7 +12979,7 @@ __meta__ = {
 
 [node name="Neck" type="Line2D" parent="Root/Spine1/Spine2/Spine3"]
 position = Vector2( 0, -4 )
-rotation = 0.00313154
+rotation = 0.0541577
 points = PoolVector2Array( 0, 0, 0, -1.165 )
 width = 2.0
 default_color = Color( 1, 1, 1, 1 )
@@ -12994,7 +12995,7 @@ __meta__ = {
 
 [node name="Head" type="Line2D" parent="Root/Spine1/Spine2/Spine3/Neck"]
 position = Vector2( 0, -4 )
-rotation = 5.36099e-05
+rotation = 0.0835282
 points = PoolVector2Array( 0, -1, 0.001, -1 )
 width = 8.0
 default_color = Color( 1, 1, 1, 1 )
@@ -13017,7 +13018,8 @@ __meta__ = {
 }
 
 [node name="LegRight" type="Line2D" parent="Root"]
-rotation = 0.985831
+position = Vector2( 0, 0.443339 )
+rotation = 1.41723
 z_index = 1
 points = PoolVector2Array( 0, 0, 10, 0 )
 width = 2.0
@@ -13034,7 +13036,7 @@ __meta__ = {
 
 [node name="LRBottom" type="Line2D" parent="Root/LegRight"]
 position = Vector2( 10, 0 )
-rotation = 1.29834
+rotation = 0.491427
 z_index = 1
 points = PoolVector2Array( 0, 0, 10, -1.90735e-06 )
 width = 2.0
@@ -13057,8 +13059,8 @@ __meta__ = {
 }
 
 [node name="ArmRight" type="Line2D" parent="Root"]
-position = Vector2( 4.79455, -10.9299 )
-rotation = 2.22193
+position = Vector2( 0.0664525, -11.5504 )
+rotation = 1.59534
 z_index = 1
 points = PoolVector2Array( 0, 0, 8, 0 )
 width = 2.0
@@ -13074,7 +13076,7 @@ __meta__ = {
 
 [node name="ARBottom" type="Line2D" parent="Root/ArmRight"]
 position = Vector2( 8, 0 )
-rotation = -0.991062
+rotation = -0.385764
 z_index = 1
 points = PoolVector2Array( 0, 0, 8, 0 )
 width = 2.0
@@ -13140,12 +13142,12 @@ anim_player = NodePath("../AnimationPlayer")
 active = true
 parameters/aim_blend/blend_position = 0.5
 parameters/fall_blend/blend_position = 0
-parameters/ground_move/blend_amount = 1.0
+parameters/ground_move/blend_amount = 0.0
 parameters/has_gun/add_amount = 0.0
-parameters/idle_blend/blend_position = 0
-parameters/in_air_state/current = 0
+parameters/idle_blend/blend_position = 0.0
+parameters/in_air_state/current = 1
 parameters/is_alive/current = 0
-parameters/jump_blend/blend_position = 0
+parameters/jump_blend/blend_position = 0.0
 parameters/run_blend/blend_position = 0.0
 parameters/run_blend/0/blend_position = 1.0
 parameters/run_blend/1/blend_position = 1.0

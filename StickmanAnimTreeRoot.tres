@@ -130,7 +130,7 @@ input_1/auto_advance = false
 [sub_resource type="AnimationNodeOneShot" id=30]
 
 [resource]
-graph_offset = Vector2( -1100, 22 )
+graph_offset = Vector2( 360, -98 )
 nodes/Animation/node = SubResource( 3 )
 nodes/Animation/position = Vector2( -160, 280 )
 "nodes/Animation 2/node" = SubResource( 1 )
@@ -164,4 +164,4 @@ nodes/space_state_weapon/node = SubResource( 29 )
 nodes/space_state_weapon/position = Vector2( -160, -20 )
 nodes/weapon_reload/node = SubResource( 30 )
 nodes/weapon_reload/position = Vector2( 200, 140 )
-node_connections = [ "output", 0, "is_alive", "is_alive", 0, "space_state", "is_alive", 1, "Animation 2", "has_gun", 0, "space_state_weapon", "has_gun", 1, "weapon_reload", "ground_move", 0, "idle_blend", "ground_move", 1, "run_timescale", "in_air_state", 0, "jump_blend", "in_air_state", 1, "fall_blend", "weapon_reload", 0, "aim_blend", "weapon_reload", 1, "Animation", "space_state_weapon", 0, "ground_move", "space_state_weapon", 1, "in_air_state", "run_timescale", 0, "run_blend", "space_state", 0, "has_gun", "space_state", 1, "Animation 5" ]
+node_connections = [ "is_alive", 0, "space_state", "is_alive", 1, "Animation 2", "run_timescale", 0, "run_blend", "weapon_reload", 0, "aim_blend", "weapon_reload", 1, "Animation", "ground_move", 0, "idle_blend", "ground_move", 1, "run_timescale", "has_gun", 0, "space_state_weapon", "has_gun", 1, "weapon_reload", "in_air_state", 0, "jump_blend", "in_air_state", 1, "fall_blend", "space_state", 0, "has_gun", "space_state", 1, "Animation 5", "space_state_weapon", 0, "ground_move", "space_state_weapon", 1, "in_air_state", "output", 0, "is_alive" ]

@@ -13,11 +13,11 @@ drag_margin_h_enabled = true
 drag_margin_v_enabled = true
 
 [node name="WeaponSlot" parent="." index="5"]
-position = Vector2( -6.92952, -32.4183 )
-rotation = 2.05252
+position = Vector2( -12.1947, -30.6311 )
+rotation = 1.61404
 
 [node name="WeaponWallDetector" parent="Rays" index="1"]
-position = Vector2( 8.06666, -34.7929 )
+position = Vector2( 0.374686, -39.1478 )
 
 [node name="Light2D" type="Light2D" parent="Rays/WeaponWallDetector" index="0"]
 visible = false
