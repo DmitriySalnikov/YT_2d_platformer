@@ -10,10 +10,10 @@ func _ready() -> void:
 
 func set_spawn_name(val : String):
 	SpawnName = val.to_lower()
-	if Engine.editor_hint:
+	if has_node("EditorOnly/Label"):
 		$EditorOnly/Label.text = SpawnName
 
 func set_facing_right(val : bool):
 	IsFacingRight = val
-	if Engine.editor_hint:
+	if has_node("EditorOnly/RayCast2D"):
 		$EditorOnly/RayCast2D.scale = Vector2(1 if IsFacingRight else -1, 1)

@@ -1,0 +1,48 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://TestTileset.png" type="Texture" id=1]
+[ext_resource path="res://SimpleDoor.gd" type="Script" id=2]
+[ext_resource path="res://EditorOnly2D.tscn" type="PackedScene" id=3]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 8, 64 )
+
+[node name="SimpleDoor" type="Node2D" groups=[
+"interaction_subject",
+]]
+script = ExtResource( 2 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 3
+
+[node name="Sprite" type="Sprite" parent="StaticBody2D"]
+position = Vector2( 3.05176e-05, 0 )
+scale = Vector2( 0.499998, 4.5 )
+texture = SubResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource( 2 )
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="EditorOnly2D" parent="." instance=ExtResource( 3 )]
+ShowInDebug = true
+
+[node name="Label" type="Label" parent="EditorOnly2D"]
+margin_left = -24.0
+margin_top = -8.0
+margin_right = 24.0
+margin_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "DoorID:
+UNNAMED"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

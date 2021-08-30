@@ -44,42 +44,50 @@ z_index = -2
 shape = SubResource( 3 )
 
 [node name="WeaponSlot" type="Node2D" parent="."]
-position = Vector2( -12.1947, -30.6311 )
-rotation = 1.61404
+position = Vector2( -12.1553, -30.0573 )
+rotation = 1.60634
 scale = Vector2( 3, 3 )
 
 [node name="Gun" parent="WeaponSlot" instance=ExtResource( 5 )]
 
-[node name="Rays" type="Node2D" parent="."]
+[node name="Collisions" type="Node2D" parent="."]
 
-[node name="TwoWayPlatformChecker" type="RayCast2D" parent="Rays"]
+[node name="InteractionArea" type="Area2D" parent="Collisions"]
+monitorable = false
+collision_layer = 0
+collision_mask = 128
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collisions/InteractionArea"]
+polygon = PoolVector2Array( 8, -48, 24, -80, 40, -16, 24, 48, 8, 16 )
+
+[node name="TwoWayPlatformChecker" type="RayCast2D" parent="Collisions"]
 position = Vector2( 0, 55.4526 )
 enabled = true
 cast_to = Vector2( 0, 5 )
 collision_mask = 4
 
-[node name="WeaponWallDetector" type="RayCast2D" parent="Rays"]
-position = Vector2( 0.374686, -39.1478 )
+[node name="WeaponWallDetector" type="RayCast2D" parent="Collisions"]
+position = Vector2( 0.348072, -38.6706 )
 enabled = true
 exclude_parent = false
 cast_to = Vector2( 46, 0 )
 
-[node name="WallDetectors" type="Node2D" parent="Rays"]
+[node name="WallDetectors" type="Node2D" parent="Collisions"]
 
-[node name="1" type="RayCast2D" parent="Rays/WallDetectors"]
+[node name="1" type="RayCast2D" parent="Collisions/WallDetectors"]
 position = Vector2( 0, -33 )
 enabled = true
 exclude_parent = false
 cast_to = Vector2( 16, 0 )
 collision_mask = 2
 
-[node name="2" type="RayCast2D" parent="Rays/WallDetectors"]
+[node name="2" type="RayCast2D" parent="Collisions/WallDetectors"]
 enabled = true
 exclude_parent = false
 cast_to = Vector2( 16, 0 )
 collision_mask = 2
 
-[node name="3" type="RayCast2D" parent="Rays/WallDetectors"]
+[node name="3" type="RayCast2D" parent="Collisions/WallDetectors"]
 position = Vector2( 0, 40 )
 enabled = true
 exclude_parent = false
@@ -88,6 +96,6 @@ collision_mask = 2
 
 [node name="StickmanVisual" parent="." instance=ExtResource( 2 )]
 WeaponSlotPath = NodePath("../WeaponSlot")
-WeaponWallDetectorPath = NodePath("../Rays/WeaponWallDetector")
+WeaponWallDetectorPath = NodePath("../Collisions/WeaponWallDetector")
 
 [node name="Tween" type="Tween" parent="."]

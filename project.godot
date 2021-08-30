@@ -50,6 +50,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
+C="*res://Constants.gd"
 G="*res://Global.gd"
 LevelSwitchFade="*res://LevelSwitchFade.tscn"
 
@@ -90,6 +91,11 @@ reload={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":82,"unicode":0,"echo":false,"script":null)
  ]
 }
+interact={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":69,"unicode":0,"echo":false,"script":null)
+ ]
+}
 
 [input_devices]
 
@@ -101,6 +107,7 @@ pointing/emulate_touch_from_mouse=true
 2d_physics/layer_2="GripWalls"
 2d_physics/layer_3="TwoWayPlatforms"
 2d_physics/layer_4="OneWayPlatforms"
+2d_physics/layer_8="Interactables"
 2d_physics/layer_9="Props"
 2d_physics/layer_10="Characters"
 2d_physics/layer_11="Enemies"

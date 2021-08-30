@@ -4,7 +4,7 @@ extends StickmanCharacter
 export(float, 0, 5) var JumpCooldown := 0.1
 
 onready var enemy_detector := $EnemyDetector
-onready var next_floor_platform_checker := $Rays/NextPlatformFloorChecker
+onready var next_floor_platform_checker := $NextPlatformFloorChecker
 
 var navmap : Navigation2D
 var last_path : Array
@@ -60,6 +60,9 @@ func _enemy_move():
 				dir = vec_to_point.normalized().x
 	
 	self.input_move_direction = dir
+	
+	if last_path.size() > 1 and global_position.distance_to(last_path[1]) < 16:
+		last_path.remove(0)
 
 func _enemy_jump():
 	self.input_jump_just_pressed = false

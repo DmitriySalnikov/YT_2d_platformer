@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://StickmanCharacter.tscn" type="PackedScene" id=1]
 [ext_resource path="res://StickmanPlayer.gd" type="Script" id=2]
-[ext_resource path="res://Flashlight.png" type="Texture" id=3]
 
 [node name="StickmanPlayer" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
@@ -13,18 +12,11 @@ drag_margin_h_enabled = true
 drag_margin_v_enabled = true
 
 [node name="WeaponSlot" parent="." index="5"]
-position = Vector2( -12.1947, -30.6311 )
-rotation = 1.61404
+position = Vector2( -12.228, -31.5 )
+rotation = 1.57507
 
-[node name="WeaponWallDetector" parent="Rays" index="1"]
-position = Vector2( 0.374686, -39.1478 )
-
-[node name="Light2D" type="Light2D" parent="Rays/WeaponWallDetector" index="0"]
-visible = false
-scale = Vector2( 0.811, 0.765 )
-texture = ExtResource( 3 )
-offset = Vector2( 232.609, 0 )
-energy = 1.11
+[node name="WeaponWallDetector" parent="Collisions" index="2"]
+position = Vector2( 0, -40.5 )
 
 [node name="StickmanVisual" parent="." index="7"]
 TintColor = Color( 0, 0, 0, 1 )

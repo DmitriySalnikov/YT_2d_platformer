@@ -4,7 +4,7 @@
 [ext_resource path="res://EditorOnly2D.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 24.7822, 63.8386 )
+extents = Vector2( 24, 63.8386 )
 
 [node name="LevelSwitcher" type="Area2D"]
 monitorable = false

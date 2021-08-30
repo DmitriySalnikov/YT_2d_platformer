@@ -34,18 +34,19 @@ onready var health_comp := $HealthComp
 onready var stickman_visual : = $StickmanVisual
 onready var capsule_collison : CollisionShape2D = $CS2D
 onready var slope_ray_collision : CollisionShape2D = $CSSlopeRay
-onready var rays : Node2D = $Rays
+onready var rays : Node2D = $Collisions
+onready var interaction_area : Area2D = $Collisions/InteractionArea
 
 onready var weapon_slot : Node2D = $WeaponSlot
-onready var weapon_wall_detector : RayCast2D = $Rays/WeaponWallDetector
+onready var weapon_wall_detector : RayCast2D = $Collisions/WeaponWallDetector
 onready var current_weapon : Node2D = null
 onready var weapons_map := {
 	WeaponTypes.None : null,
 	WeaponTypes.Gun : $WeaponSlot/Gun,
 }
 
-onready var wall_detectors_root : Node2D = $Rays/WallDetectors
-onready var two_way_platform_checker : RayCast2D = $Rays/TwoWayPlatformChecker
+onready var wall_detectors_root : Node2D = $Collisions/WallDetectors
+onready var two_way_platform_checker : RayCast2D = $Collisions/TwoWayPlatformChecker
 onready var tween : Tween = $Tween
 
 var input_move_direction : float
@@ -55,6 +56,7 @@ var input_look_angle : float
 var input_fire_pressed : bool
 var input_next_weapon_just_pressed : bool
 var input_reload_just_pressed : bool
+var input_interact_just_pressed : bool
 var enable_onfloor_manual_rotation : bool = false
 
 var prev_position := Vector2()
@@ -116,6 +118,7 @@ func _physics_process(_delta: float) -> void:
 		process_input()
 		
 		weapons()
+		interact()
 		run()
 		on_wall()
 		jump()
@@ -172,6 +175,16 @@ func on_resurrected():
 func on_resurrected_virtual():
 	pass
 
+
+# =================================
+# Interactions
+
+func interact():
+	if input_interact_just_pressed:
+		var areas = interaction_area.get_overlapping_areas()
+		if areas.size() > 0:
+			areas[0].get_parent().interact(self)
+		
 
 # =================================
 # Weapons
@@ -485,3 +498,6 @@ func set_current_weapon(val : int):
 						c.visible = true
 					else:
 						c.visible = false
+
+func has_keycard(id : String) -> bool:
+	 return G.check_collected_card(id)

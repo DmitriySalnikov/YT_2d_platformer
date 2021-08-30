@@ -18,7 +18,8 @@ func process_input():
 	self.input_fire_pressed = Input.is_action_pressed("fire")
 	self.input_next_weapon_just_pressed = Input.is_action_just_pressed("ui_home")
 	self.input_reload_just_pressed = Input.is_action_just_pressed("reload")
-
+	self.input_interact_just_pressed = Input.is_action_just_pressed("interact")
+	
 	var player_pos : Vector2 = get_global_mouse_position()
 	var weapon_pos : Vector2 = global_position if current_weapon == null or CurrentWeaponType == WeaponTypes.None else weapon_wall_detector.global_position
 	var dist = weapon_pos.x - player_pos.x
