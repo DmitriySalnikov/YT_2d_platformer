@@ -4,7 +4,7 @@ extends Node2D
 export var CardID := "UNNAMED" setget set_card_id
 
 func _ready() -> void:
-	if G.check_collected_card(CardID):
+	if not Engine.editor_hint && G.check_collected_card(CardID):
 		queue_free()
 	$AnimationPlayer.play("Base")
 

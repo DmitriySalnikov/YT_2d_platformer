@@ -20,7 +20,8 @@ func _ready() -> void:
 	self.InteractionSubjectID = InteractionSubjectID
 	
 	if IsOneshot:
-		is_opened = G.get_interactable_state(G.InteractableTypes.Keypad, KeypadID, false)
+		if G.has_meta("ready"):
+			is_opened = G.get_interactable_state(G.InteractableTypes.Keypad, KeypadID, false)
 		if is_opened:
 			anim.play("Activated")
 			yield(get_tree(), "idle_frame")

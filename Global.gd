@@ -11,7 +11,7 @@ var WorldState := {}
 var CollectedKeycards := []
 
 func _ready() -> void:
-	pass # Replace with function body.
+	set_meta("ready", true)
 
 func check_collected_card(id : String):
 	return CollectedKeycards.has(id)

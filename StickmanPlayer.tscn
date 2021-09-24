@@ -13,10 +13,6 @@ drag_margin_v_enabled = true
 
 [node name="WeaponSlot" parent="." index="5"]
 position = Vector2( -12.228, -31.5 )
-rotation = 1.57507
-
-[node name="WeaponWallDetector" parent="Collisions" index="2"]
-position = Vector2( 0, -40.5 )
 
 [node name="StickmanVisual" parent="." index="7"]
 TintColor = Color( 0, 0, 0, 1 )
