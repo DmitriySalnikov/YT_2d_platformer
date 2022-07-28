@@ -1,4 +1,5 @@
 .import
+.mono
 *.tmp.txt
 Game/android/build/
 Game/android/.build_version
